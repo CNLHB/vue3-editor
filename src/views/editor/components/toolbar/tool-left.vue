@@ -21,14 +21,15 @@
      <div class="tool_line"></div>
 
     <div class="l_action ">
-      <el-button  class="custom_btn" type="text">
-        撤回
+      <el-button  class="custom_btn disabled" type="text">
+        <span class="action_btn undo"></span>
+      </el-button>
+     <el-button class="custom_btn custom_btn_redo" type="text">
+        <span class="action_btn redo disabled"></span>
       </el-button>
     </div>
     <div>
-      <el-button class="custom_btn" type="text">
-        重做
-      </el-button>
+
   </div>
   </div>
 </template>
@@ -81,6 +82,10 @@ export default {
       background-color: #f1f2f4;
       border-color: #f1f2f4;
     }
+
+    &.custom_btn_redo{
+      margin-left:0;
+    }
   }
 .tool_line{
     width: 0;
@@ -90,18 +95,30 @@ export default {
 }
 .l_action{
   display: flex;
+    .action_btn{
+      display: inline-block;
+      font-size: 12px;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+    }
     .undo{
-        font-size: 12px;
-    width: 19px;
-    height: 18px;
-    min-height: 0;
-    padding: 0;
-    border: 0 none;
-    transition: none!important;
-    background-color: transparent!important;
-    background: url(../imgs/undo_disable.png) no-repeat center;
+      background: url(../../imgs/redo_ennable.png) no-repeat center;
+      transform: rotateY(180deg);
+      &.disabled{
+        background: url(../../imgs/undo_disable.png) no-repeat center;
+        transform: rotateY(0deg);
+        cursor: not-allowed;
 
-  }
-  
+      }
+    }
+    .redo{
+      background: url(../../imgs/redo_ennable.png) no-repeat center;
+      &.disabled{
+        background: url(../../imgs/undo_disable.png) no-repeat center;
+        transform: rotateY(180deg);
+        cursor: not-allowed;
+      }
+    }
 }
 </style>
