@@ -1,0 +1,21 @@
+{
+  "name": "vite-editor",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@vueuse/core": "^6.5.3",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "vue": "^3.2.20",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.9.2",
+    "vite": "^2.6.0"
+  }
+}
