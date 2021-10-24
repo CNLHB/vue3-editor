@@ -1,17 +1,15 @@
 <!--  -->
 <template>
-  <div>index</div>
+  <div>editor</div>
 </template>
 
 <script>
 export default {
     setup(props){
-        return {
-            
-        }
+        
     }
 }
 
 </script>
-<style  scoped>
+<style lang='less' scoped>
 </style>
