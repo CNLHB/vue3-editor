@@ -1,7 +1,7 @@
 <template>
         <el-input
         v-if="inputVisible"
-        ref="saveTagInput"
+        ref="inputRef"
         v-model="inputValue"
         class="input-new-tag"
         size="mini"
@@ -10,18 +10,19 @@
       >
       </el-input>
       <el-button v-else class="button-new-tag" size="small" @click="showInput"
-        >文档标题</el-button
+        >{{inputValue}}</el-button
       >
 </template>
 
 <script>
-import {reactive,toRefs} from 'vue'
+import {nextTick, reactive,toRefs} from 'vue'
 export default {
   name: "tool-right",
   setup(props) {
     const state = reactive({
         inputVisible:false,
-        inputValue:'文档标题'
+        inputValue:'文档标题',
+        inputRef:null
     })
     function handleInputConfirm(){
         state.inputVisible = false
@@ -29,6 +30,9 @@ export default {
     }
     function showInput(){
         state.inputVisible = true
+        nextTick((_) => {
+            state.inputRef.focus()
+      })
     }
     return {
         ...toRefs(state),
@@ -42,5 +46,11 @@ export default {
 <style scoped lang="less">
 .t_right{
   justify-self: flex-end;
+}
+.button-new-tag{
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 </style>

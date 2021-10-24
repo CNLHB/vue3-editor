@@ -8,7 +8,7 @@
       <div class="main_l">
         <SideBar />
       </div>
-      <div class="main_m">
+      <div class="main_m" :style="{left:paddingLeft}">
         <Editor />
       </div>
       <div class="main_r">
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { reactive,toRefs } from 'vue'
 import Editor from './components/Editor.vue'
 import Panel from './components/Panel.vue'
 import SideBar from './components/SideBar.vue'
@@ -31,8 +32,11 @@ export default {
         Panel
     },
     setup(props){
+        const state = reactive({
+          paddingLeft:'350px'//65px   350px
+        })
         return {
-
+          ...toRefs(state)
         }
     }
 }
