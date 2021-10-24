@@ -1,4 +1,4 @@
-const Index = () => import(/* webpackChunkName:"index" */ '../../../view/editor/index.vue')
+const Index = () => import(/* webpackChunkName:"index" */ '../../../views/editor/index.vue')
 export default [
   {
     path: '/index',

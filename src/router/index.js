@@ -5,8 +5,8 @@ import editor from './modules/editor/index'
 export const constantRouterMap = [
   ...index,
   ...editor,
-  // { path: '/404', component: () => import('@/components/404') },
-  // { path: '/:catchAll(.*)', redirect: '/404' }
+  { path: '/404', component: () => import('@/components/404.vue') },
+  { path: '/:catchAll(.*)', redirect: '/404' }
 ]
 
 // const base = location.pathname.split('/').slice(0, window.baseLen + 1).join('/')
