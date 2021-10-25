@@ -27,7 +27,4 @@ body {
   height: 100%;
   color: @baseColor;
 }
-a{
-  text-decoration: none;
-}
 </style>
