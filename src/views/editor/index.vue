@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="wrap">
+  <div class="wrap" :style="style">
     <div class="header">
       <ToolBar></ToolBar>
     </div>
@@ -19,24 +19,29 @@
 </template>
 
 <script>
-import Editor from './components/Editor.vue'
-import Panel from './components/Panel.vue'
-import SideBar from './components/SideBar.vue'
-import ToolBar from "./components/ToolBar.vue"
+import { computed, ref } from "@vue/reactivity";
+import Editor from "./components/Editor.vue";
+import Panel from "./components/Panel.vue";
+import SideBar from "./components/SideBar/index.vue";
+import ToolBar from "./components/ToolBar.vue";
 export default {
-    components:{
-        ToolBar,
-        SideBar,
-        Editor,
-        Panel
-    },
-    setup(props){
-        return {
-
-        }
-    }
-}
-
+  components: {
+    ToolBar,
+    SideBar,
+    Editor,
+    Panel,
+  },
+  setup(props) {
+    const theme = ref("#2183FE");
+    const style = computed(() => ({
+      "--theme": theme.value,
+    }));
+    return {
+      theme,
+      style,
+    };
+  },
+};
 </script>
 <style lang="less"  scoped>
 .wrap {
@@ -48,13 +53,13 @@ export default {
   overflow: hidden;
   background: @lineColor;
 }
-.header{
-    position: relative;
+.header {
+  position: relative;
   display: flex;
   align-items: center;
   height: @editorToolBarHeight;
   background: #fff;
-  box-shadow: 0 1px 10px rgba(0,0,0, 0.01);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.01);
   border-bottom: 1px solid @lineColor;
   box-sizing: border-box;
 }
@@ -84,7 +89,7 @@ export default {
   bottom: 0;
   right: @editorPropsPanelWidth;
   left: @editorSideBarMaterialWidth;
-  transition: left .35s;
+  transition: left 0.35s;
 }
 
 .disabled_editor {
