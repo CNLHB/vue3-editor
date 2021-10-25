@@ -8,7 +8,7 @@
       <div class="main_l">
         <SideBar />
       </div>
-      <div class="main_m">
+      <div class="main_m" :style="{ left: paddingLeft }">
         <Editor />
       </div>
       <div class="main_r">
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { computed, ref } from "@vue/reactivity";
+import { computed, ref, reactive, toRefs } from "@vue/reactivity";
 import Editor from "./components/Editor.vue";
 import Panel from "./components/Panel.vue";
 import SideBar from "./components/SideBar/index.vue";
@@ -36,9 +36,13 @@ export default {
     const style = computed(() => ({
       "--theme": theme.value,
     }));
+    const state = reactive({
+      paddingLeft: "350px", //65px   350px
+    });
     return {
       theme,
       style,
+      ...toRefs(state),
     };
   },
 };
