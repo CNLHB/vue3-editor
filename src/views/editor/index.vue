@@ -8,7 +8,10 @@
       <div class="main_l">
         <SideBar />
       </div>
-      <div class="main_m" :style="{ left: paddingLeft }">
+      <div class="main_l_s">
+        <SideBarAside></SideBarAside>
+      </div>
+      <div class="main_m">
         <Editor />
       </div>
       <div class="main_r">
@@ -18,34 +21,19 @@
   </div>
 </template>
 
-<script>
-import { computed, ref, reactive, toRefs } from "@vue/reactivity";
+<script setup>
+import { computed, ref, reactive, toRefs, toRef } from "@vue/reactivity";
 import Editor from "./components/Editor.vue";
 import Panel from "./components/Panel.vue";
 import SideBar from "./components/SideBar/index.vue";
 import ToolBar from "./components/ToolBar.vue";
-export default {
-  components: {
-    ToolBar,
-    SideBar,
-    Editor,
-    Panel,
-  },
-  setup(props) {
-    const theme = ref("#2183FE");
-    const style = computed(() => ({
-      "--theme": theme.value,
-    }));
-    const state = reactive({
-      paddingLeft: "350px", //65px   350px
-    });
-    return {
-      theme,
-      style,
-      ...toRefs(state),
-    };
-  },
-};
+import SideBarAside from "./components/SideBarAside/index.vue";
+
+const theme = ref("#2183FE");
+
+const style = computed(() => ({
+  "--theme": theme.value,
+}));
 </script>
 <style lang="less"  scoped>
 .wrap {
@@ -78,7 +66,14 @@ export default {
 .main_l {
   position: relative;
   z-index: 10;
+  width: @editorSideBarMaterialWidth;
   height: 100%;
+}
+.main_l_s {
+  position: absolute;
+  left: @editorSideBarMaterialWidth;
+  height: 100%;
+  width: @editorLeftSectionWidth;
 }
 .main_r {
   position: absolute;
@@ -92,7 +87,7 @@ export default {
   top: 0;
   bottom: 0;
   right: @editorPropsPanelWidth;
-  left: @editorSideBarMaterialWidth;
+  left: @editorCanvasLeft;
   transition: left 0.35s;
 }
 
