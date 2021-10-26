@@ -1,122 +1,142 @@
 <!--  -->
 <template>
-  <div class="editor_wrap" ref="editorRef">
+  <div class="editor_wrap gb_scroll" ref="editorRef">
     <div class="editor_wrap_box gb_scroll layout_center">
-        <div class="editor_cnt_box">
-            <div class="editor_ele_box">
-                        <!-- <div class="editor_bg" :style="paletteBgInfo?.style"></div> -->
-        <div class="editor_eles_wrap">
-          <template v-for="item in canvasData.element" :key="item.id">
-            <EleItem
-              :item="item"
-              :type="1"
-            />
-          </template>
+      <div class="editor_cnt_box">
+        <div class="editor_ele_box" :style="editorStyle">
+          <!-- <div class="editor_bg" :style="paletteBgInfo?.style"></div> -->
+          <div class="editor_eles_wrap">
+            <template v-for="item in canvasData.element" :key="item.id">
+              <EleItem :item="item" :type="1" />
+            </template>
+          </div>
         </div>
-            </div>
-            <div class="editor_select_box">
-
-            </div>
+        <div class="editor_select_box">
+          <div class="editor_ele_hover">
+            <!-- <div v-if="isEleHoverLayerLock" class="editor_ele_select_lock_text">图层已锁定</div> -->
+          </div>
+          <div class="editor_ele_select"></div>
         </div>
+      </div>
+      <div class="mask"></div>
     </div>
   </div>
 </template>
 
 <script>
-import { onMounted, computed,reactive,toRefs,toRef } from 'vue';
-import { GETTERS } from '@commits/editor';
-import useEleEvent from '../hooks/usr-ele-event';
-import EleItem from './EleItem.vue';
+import { onMounted, computed, reactive, toRefs, toRef } from 'vue'
+import { GETTERS } from '@commits/editor'
+import useEleEvent from '../hooks/usr-ele-event'
+import EleItem from './EleItem.vue'
 import { useStore } from 'vuex'
 
 export default {
-    components:{
-        EleItem
-    },
-    setup(props){
+  components: {
+    EleItem,
+  },
+  setup(props) {
     const store = useStore()
 
-     const canvasScaleRatio = computed(() => store.state.editor.canvasScaleRatio)
+    const canvasScaleRatio = computed(() => store.state.editor.canvasScaleRatio)
     const viewCanvas = computed(() => store.getters[GETTERS.VIEW_CANVAS])
     // const preViewCanvas = computed(() => store.getters[GETTERS.PREVIEW_CANVAS])
-      const canvasData = computed(() => {
-    //   if (type.value === 'view') {
-    //     return preViewCanvas.value
-    //   }
+    const canvasData = computed(() => {
+      //   if (type.value === 'view') {
+      //     return preViewCanvas.value
+      //   }
 
       return viewCanvas.value
     })
-    console.log(canvasData.value);
-      const state = reactive({
-        editorRef:null
-      })
-      
-      const {bindEditEvents} = useEleEvent(toRef(state, 'editorRef'))
-      onMounted(()=>{
-        bindEditEvents()
-      })
-        function clickhandle(event){
-          console.log(event);
-        }
-        return {
-          ...toRefs(state),
-          clickhandle,
-          canvasData
-        }
-    }
-}
+    console.log(canvasData.value)
+    const state = reactive({
+      editorRef: null,
+      editorStyle: {
+        width: canvasData.value.width + 'px',
+        height: canvasData.value.height + 'px',
+      },
+    })
 
+    const { bindEditEvents } = useEleEvent(toRef(state, 'editorRef'))
+    onMounted(() => {
+      // bindEditEvents()
+    })
+    function clickhandle(event) {
+      console.log(event)
+    }
+    return {
+      ...toRefs(state),
+      clickhandle,
+      canvasData,
+    }
+  },
+}
 </script>
 <style lang='less' scoped>
-.editor_wrap{
+.editor_wrap {
   width: 100%;
   height: 100%;
   position: relative;
   overflow: hidden;
+}
+.editor_wrap_box {
+  position: relative;
+  height: 100%;
   padding: 30px;
   box-sizing: border-box;
+
+  white-space: nowrap;
+  overflow: overlay !important;
 }
-.editor_wrap_box{
-  position: relative;
-    height: 100%;
-    white-space: nowrap;
-    overflow: overlay !important;
-}
-.editor_cnt_box{
+.editor_cnt_box {
   position: relative;
   z-index: 1;
   display: inline-block;
   white-space: normal;
   box-sizing: border-box;
 }
-.editor_ele_box{
-   display: inline-block;
-  width: 300px;
-  height: 300px;
+.editor_ele_box {
+  display: inline-block;
+  width: 500px;
+  height: 750px;
   background: #fff;
+  box-shadow: 0 0 20px rgb(0 0 0 / 10%);
   // 配合layout_center实现水平垂直居中
   vertical-align: middle;
-.editor_eles_wrap{
+  position: relative;
+  overflow: hidden;
+  .editor_eles_wrap {
     height: 100%;
     width: 100%;
+  }
 }
-
-}
-.layout_center{
+.layout_center {
   text-align: center;
   &:after {
     content: '';
     display: inline-block;
     height: 100%;
     vertical-align: middle;
+  }
 }
-  
+
+.editor_select_box {
+  pointer-events: initial;
+  .editor_ele_select {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 10;
+    border: 1px solid @hoverColor;
+  }
 }
-.item_img{
+.mask {
   position: absolute;
-  top: 30px;
-  left: 30px;
-  width: 100px;
-  height:100px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 </style>

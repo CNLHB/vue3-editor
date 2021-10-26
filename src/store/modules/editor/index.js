@@ -3,10 +3,14 @@ import { defaultImgData } from "./config"
 
 const state = () => {
   return {
+    pointerInfo:{
+      x:0,
+      y:0,
+    },
     title: '',
     curCanvas: {
-      width: 750, // 画板宽
-      height: 1334, // 画板高
+      width: 500, // 画板宽
+      height: 1500, // 画板高
       bgImage: '', // 画板背景图
       bgColor: {
         type: 'linear',
@@ -80,6 +84,10 @@ const mutations = {
     console.log(width);
     state.materialPanelWidth = width
   },
+  setPointerInfo(state,pointerInfo){
+    state.pointerInfo = pointerInfo
+
+  }
 }
 
 const actions = {}

@@ -1,8 +1,12 @@
 import { reactive, toRefs } from 'vue'
+import { useStore } from 'vuex'
+import { COMMITS } from '../../../store/const/editor'
 
-export default function useeleEvent (ele, {
+export default function useEditorEvent (ele, {
   isEnterWrap = true
 } = {}) {
+   const store =  useStore()
+
   const state = reactive({
        x: 0,
        y: 0,
@@ -15,7 +19,8 @@ export default function useeleEvent (ele, {
   const body = document.body
   function bindEditEvents () {
     ele.value.addEventListener('mousedown', handleMouseDown)
-    body.addEventListener('mouseup', handleMouseUp)
+    ele.value.addEventListener('mousemove', handleMouseMove)
+    // body.addEventListener('mouseup', handleMouseUp)
   }
 
   function unbindEditEvents () {
@@ -24,14 +29,22 @@ export default function useeleEvent (ele, {
     body.removeEventListener('mouseup', handleMouseUp)
   }
   function handleMouseDown (event) {
-      console.log('down');
-    // console.log(event);
-    // console.log(event.target);
+      console.log('editor');
     state.target = event.target
-    ele.value.addEventListener('mousemove', handleMouseMove)
   }
   function handleMouseMove (event) {
-      console.log(event);
+    state.target = event.target
+    const pointerInfo = {
+        x:event.offsetX,
+        y:event.offsetY,
+    }
+    store.commit(COMMITS.SET_POINTER_INFO,pointerInfo)
+    console.log(event.pageX);
+    console.log(event.pageY);
+    console.log(event.clientX);
+    console.log(event.clientY);
+    console.log(event.offsetY);
+    console.log(event.offsetY);
   }
   function handleMouseUp (event) {
     ele.value.removeEventListener('mousemove', handleMouseMove)

@@ -1,5 +1,5 @@
 <template>
-  <div class="editor_wrapper" id="editorWrapper">
+  <div class="editor_wrapper" ref="editorRef" id="editorWrapper">
     <Canvas
       id="editorCanvas"
     />
@@ -12,18 +12,20 @@
 
 <script>
 import { onMounted, reactive,toRefs,toRef } from 'vue';
-import useEleEvent from '../hooks/usr-ele-event';
+import useEditorEvent from '../hooks/use-editor-event';
 import Canvas from './Canvas.vue';
 export default {
     components:{
         Canvas
     },
     setup(props){
-
       const state = reactive({
         editorRef:null
       })
+      const { bindEditEvents} = useEditorEvent(toRef(state, 'editorRef'))
+
       onMounted(()=>{
+        bindEditEvents()
       })
         function clickhandle(event){
           console.log(event);
@@ -41,5 +43,9 @@ export default {
   width: 100%;
     height: 100%;
     position: relative;
+   overflow: hidden;
+  // padding: 30px;
+  // box-sizing: border-box;
+
 }
 </style>

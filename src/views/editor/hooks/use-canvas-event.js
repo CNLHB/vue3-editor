@@ -1,8 +1,10 @@
 import { reactive, toRefs } from 'vue'
+import { useStore } from 'vuex/types/index.js'
 
-export default function useeleEvent (ele, {
+export default function useCanvasEvent (ele, {
   isEnterWrap = true
 } = {}) {
+   const store =  useStore()
   const state = reactive({
        x: 0,
        y: 0,
@@ -15,6 +17,8 @@ export default function useeleEvent (ele, {
   const body = document.body
   function bindEditEvents () {
     ele.value.addEventListener('mousedown', handleMouseDown)
+    ele.value.addEventListener('mousemove', handleMouseMove)
+
     body.addEventListener('mouseup', handleMouseUp)
   }
 
@@ -25,10 +29,8 @@ export default function useeleEvent (ele, {
   }
   function handleMouseDown (event) {
       console.log('down');
-    // console.log(event);
-    // console.log(event.target);
     state.target = event.target
-    ele.value.addEventListener('mousemove', handleMouseMove)
+    // ele.value.addEventListener('mousemove', handleMouseMove)
   }
   function handleMouseMove (event) {
       console.log(event);
