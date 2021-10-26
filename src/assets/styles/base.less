@@ -1,33 +1,38 @@
+@baseColor: #51535c;
+@whiteTheme: #fefefe;
 @dangerColor: #f54531;
 @lineColor: #eef2f8;
 @nomalTransition: all .3s;
 @editorPropsPanelWidth: 276px;
-@editorSideBarMaterialWidth: 65px;
+@editorLeftSectionWidth: 276px;
+@editorCanvasLeft: 350px;
+@editorSideBarMaterialWidth: 60px;
 @editorToolBarHeight: 54px;
 @disabledColor: #bec3c9;
 @hoverColor: #4E6EF2;
 @barColor: #E4E7ED;
 @delColor: #f56c6c;
 @btnPrimary: #2183FE;
-    .gb_ele_visible_hide {
-      visibility: hidden;
-    }
-    
-    .gb_disabled_cursor {
-      cursor: not-allowed!important;
-    }
-    
-    .gb_scroll {
-      &::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: @disabledColor;
-        border-radius: 5px;
-      }
-    }
-    
-    .gb_disabled {
-      cursor: not-allowed!important;
-    }
+.gb_ele_visible_hide {
+  visibility: hidden;
+}
+
+.gb_disabled_cursor {
+  cursor: not-allowed!important;
+}
+
+.gb_scroll {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: @disabledColor;
+    border-radius: 5px;
+  }
+}
+
+.gb_disabled {
+  cursor: not-allowed!important;
+}
+

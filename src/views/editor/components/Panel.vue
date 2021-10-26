@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div>pancel</div>
+  <div class="pancel_wrap">pancel</div>
 </template>
 
 <script>
@@ -12,4 +12,8 @@ export default {
 
 </script>
 <style lang='less' scoped>
+.pancel_wrap{
+  height: 100%;
+  background: #fff;
+}
 </style>

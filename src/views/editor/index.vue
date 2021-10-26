@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="wrap">
+  <div class="wrap" :style="style">
     <div class="header">
       <ToolBar></ToolBar>
     </div>
@@ -8,7 +8,10 @@
       <div class="main_l">
         <SideBar />
       </div>
-      <div class="main_m">
+      <div class="main_l_s">
+        <SideBarAside></SideBarAside>
+      </div>
+      <div class="main_m" :style="{left:materialPanelWidth+'px'}">
         <Editor />
       </div>
       <div class="main_r">
@@ -18,24 +21,22 @@
   </div>
 </template>
 
-<script>
-import Editor from './components/Editor.vue'
-import Panel from './components/Panel.vue'
-import SideBar from './components/SideBar.vue'
-import ToolBar from "./components/ToolBar.vue"
-export default {
-    components:{
-        ToolBar,
-        SideBar,
-        Editor,
-        Panel
-    },
-    setup(props){
-        return {
+<script setup>
+import { computed, ref, reactive, toRefs, toRef } from "@vue/reactivity";
+import Editor from "./components/Editor.vue";
+import Panel from "./components/Panel.vue";
+import SideBar from "./components/SideBar/index.vue";
+import ToolBar from "./components/ToolBar.vue";
+import SideBarAside from "./components/SideBarAside/index.vue";
+import { useStore } from "vuex";
 
-        }
-    }
-}
+const store = useStore()
+const theme = ref("#2183FE");
+
+const style = computed(() => ({
+  "--theme": theme.value,
+}));
+const materialPanelWidth = computed(() => store.state.editor.materialPanelWidth)
 
 </script>
 <style lang="less"  scoped>
@@ -48,13 +49,13 @@ export default {
   overflow: hidden;
   background: @lineColor;
 }
-.header{
-    position: relative;
+.header {
+  position: relative;
   display: flex;
   align-items: center;
   height: @editorToolBarHeight;
   background: #fff;
-  box-shadow: 0 1px 10px rgba(0,0,0, 0.01);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.01);
   border-bottom: 1px solid @lineColor;
   box-sizing: border-box;
 }
@@ -69,7 +70,14 @@ export default {
 .main_l {
   position: relative;
   z-index: 10;
+  width: @editorSideBarMaterialWidth;
   height: 100%;
+}
+.main_l_s {
+  position: absolute;
+  left: @editorSideBarMaterialWidth;
+  height: 100%;
+  width: @editorLeftSectionWidth;
 }
 .main_r {
   position: absolute;
@@ -83,8 +91,8 @@ export default {
   top: 0;
   bottom: 0;
   right: @editorPropsPanelWidth;
-  left: @editorSideBarMaterialWidth;
-  transition: left .35s;
+  left: @editorCanvasLeft;
+  transition: left 0.35s;
 }
 
 .disabled_editor {

@@ -3,26 +3,28 @@
 </template>
 
 <script>
-import { watchEffect } from 'vue'
-import { useRoute } from 'vue-router'
+import { watchEffect } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
-  name: 'App',
-  setup () {
-    const route = useRoute()
+  name: "App",
+  setup() {
+    const route = useRoute();
 
     watchEffect(() => {
-      document.title = route.meta.title || '编辑器'
-    })
-  }
-}
+      document.title = route.meta.title || "编辑器";
+    });
+  },
+};
 </script>
 
-<style>
-html,body{
+<style lang="less">
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
+  color: @baseColor;
 }
 </style>

@@ -6,7 +6,7 @@ export const constantRouterMap = [
   ...index,
   ...editor,
   { path: '/404', component: () => import('@/components/404.vue') },
-  { path: '/:catchAll(.*)', redirect: '/404' }
+  { path: '/:catchAll(.*)', redirect: '/editor/index' }
 ]
 
 // const base = location.pathname.split('/').slice(0, window.baseLen + 1).join('/')
