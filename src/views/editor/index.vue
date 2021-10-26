@@ -11,7 +11,7 @@
       <div class="main_l_s">
         <SideBarAside></SideBarAside>
       </div>
-      <div class="main_m">
+      <div class="main_m" :style="{left:materialPanelWidth+'px'}">
         <Editor />
       </div>
       <div class="main_r">
@@ -28,12 +28,16 @@ import Panel from "./components/Panel.vue";
 import SideBar from "./components/SideBar/index.vue";
 import ToolBar from "./components/ToolBar.vue";
 import SideBarAside from "./components/SideBarAside/index.vue";
+import { useStore } from "vuex";
 
+const store = useStore()
 const theme = ref("#2183FE");
 
 const style = computed(() => ({
   "--theme": theme.value,
 }));
+const materialPanelWidth = computed(() => store.state.editor.materialPanelWidth)
+
 </script>
 <style lang="less"  scoped>
 .wrap {

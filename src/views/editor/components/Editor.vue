@@ -1,10 +1,10 @@
 <!--  -->
 <template>
-  <div class="editor_wrap">
+  <div class="editor_wrap" ref="editorRef">
     <div class="editor_wrap_box gb_scroll layout_center">
         <div class="editor_cnt_box">
             <div class="editor_ele_box">
-                <img class="item_img" src="../imgs/qrcode_sample.png" alt="">
+                <img @click="clickhandle" class="item_img" src="../imgs/qrcode_sample.png" alt="">
             </div>
             <div class="editor_select_box">
 
@@ -15,9 +15,25 @@
 </template>
 
 <script>
+import { onMounted, reactive,toRefs,toRef } from 'vue';
+import useEleEvent from '../hooks/usr-ele-event';
+
 export default {
     setup(props){
-        
+      const state = reactive({
+        editorRef:null
+      })
+      const {bindEditEvents} = useEleEvent(toRef(state, 'editorRef'))
+      onMounted(()=>{
+        bindEditEvents()
+      })
+        function clickhandle(event){
+          console.log(event);
+        }
+        return {
+          ...toRefs(state),
+          clickhandle
+        }
     }
 }
 
@@ -45,14 +61,22 @@ export default {
   box-sizing: border-box;
 }
 .editor_ele_box{
-  width: 1000px;
-  height: 1000px;
+   display: inline-block;
+  width: 300px;
+  height: 300px;
   background: #fff;
+  // 配合layout_center实现水平垂直居中
+  vertical-align: middle;
+
 }
 .layout_center{
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
+  text-align: center;
+  &:after {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
   
 }
 .item_img{

@@ -2,6 +2,9 @@
  * COMMITS
  */
 
+// 更新文档标题
+const SET_DOC_TITLE = 'editor/setDocTitle'
+
 // 更新选择框样式
 const UPDATE_SELECT_STYLE = 'editor/updateSelectStyle'
 
@@ -118,7 +121,8 @@ export const COMMITS = {
   SET_HOVER_ELEID,
   SET_PRESS_KEYS,
   SET_GROUP_SELECT_ELE_ID,
-  SET_GROUP_SELECT_ELE_STYLE
+  SET_GROUP_SELECT_ELE_STYLE,
+  SET_DOC_TITLE
 }
 
 /**

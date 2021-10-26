@@ -15,17 +15,22 @@
 </template>
 
 <script>
-import {nextTick, reactive,toRefs} from 'vue'
+import {nextTick, computed,reactive,toRefs} from 'vue'
+import { useStore } from 'vuex'
+import { COMMITS } from '@commits/editor'
 export default {
   name: "tool-right",
   setup(props) {
+    const store = useStore()
+    const title = computed(()=>store.state.editor.title)
     const state = reactive({
         inputVisible:false,
-        inputValue:'文档标题',
+        inputValue: title.value||'文档标题',
         inputRef:null
     })
     function handleInputConfirm(){
         state.inputVisible = false
+        store.commit(COMMITS.SET_DOC_TITLE,state.inputValue)
 
     }
     function showInput(){

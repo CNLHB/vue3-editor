@@ -1,6 +1,8 @@
 <script setup>
 import { computed, reactive, ref } from "vue";
-
+import { useStore } from "vuex";
+import { COMMITS } from "@commits/editor";
+const store = useStore()
 const boxState = reactive({
   isShrinked: false,
 });
@@ -12,6 +14,9 @@ const boxClass = computed(() => ({
 
 const shrinkHandler = () => {
   boxState.isShrinked = !boxState.isShrinked;
+  store.commit(COMMITS.SET_MATERIAL_PANEL_WIDTH,!boxState.isShrinked?350:60)
+  console.log('关闭');
+
 };
 </script>
 
@@ -28,6 +33,8 @@ const shrinkHandler = () => {
   border-left: 1px solid @lineColor;
   background-color: @whiteTheme;
   transition: transform 0.14s ease-out;
+  z-index: 2;
+
   .shrink {
     content: "";
     position: absolute;

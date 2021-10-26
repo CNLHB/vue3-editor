@@ -31,6 +31,7 @@ const sidebarBtnClick = (idx) => (activeIdx.value = idx);
   position: relative;
   height: 100%;
   background: #fff;
+  z-index: 3;
   .sidebar-btn {
     padding: 18px 0;
     text-align: center;
