@@ -4,7 +4,7 @@ import { useStore } from "vuex";
 import { COMMITS } from "@commits/editor";
 const store = useStore()
 const boxState = reactive({
-  isShrinked: false,
+  isShrinked: true,
 });
 
 const boxClass = computed(() => ({

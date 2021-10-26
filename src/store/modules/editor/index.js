@@ -1,8 +1,10 @@
+import { cloneDeep } from "lodash"
+import { defaultImgData } from "./config"
 
 const state = () => {
   return {
     title: '',
-    palette: {
+    curCanvas: {
       width: 750, // 画板宽
       height: 1334, // 画板高
       bgImage: '', // 画板背景图
@@ -27,15 +29,47 @@ const state = () => {
             pst: 0
           }
         ]
-      } // 画板背景色
+      }, // 画板背景色
+      element: [defaultImgData],
     },
-    element: [],
     canvasScaleRatio: 1,
-    materialPanelWidth: 350,
+    materialPanelWidth: 60,
+    
   }
 }
 
 const getters = {
+  preViewCanvas (state) {
+    const copyCurCanvas = cloneDeep(state.curCanvas)
+    const { element } = copyCurCanvas || {}
+
+    if (!Array.isArray(element)) {
+      return state.curCanvas
+    }
+
+    const ratio = PREVIEW_WIDTH / state.curCanvas.palette.width
+
+    // const copyElement = getRatioElements(element, ratio)
+
+    // copyCurCanvas.element = copyElement
+
+    return copyCurCanvas
+  },
+  viewCanvas (state) {
+    const copyCurCanvas = cloneDeep(state.curCanvas)
+    const { element } = copyCurCanvas || {}
+
+    if (!Array.isArray(element)) {
+      return state.curCanvas
+    }
+
+    const ratio = state.canvasScaleRatio
+    // const copyElement = getRatioElements(element, ratio)
+
+    // copyCurCanvas.element = copyElement
+
+    return copyCurCanvas
+  },
 }
 
 const mutations = {

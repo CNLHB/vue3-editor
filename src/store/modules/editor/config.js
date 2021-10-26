@@ -1,5 +1,6 @@
 // 数据结构定义
-import imgUrl from '../../assets/images/logo.png'
+import imgUrl from '../../../assets/images/logo.png'
+
 export const defaultTextData = {
     type: 'text',
     x: 0, // 文本框画板位置x
