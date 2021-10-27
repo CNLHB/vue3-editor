@@ -1,11 +1,12 @@
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs,computed } from 'vue'
 import { useStore } from 'vuex'
-import { COMMITS } from '../../../store/const/editor'
+import { COMMITS,GETTERS} from '../../../store/const/editor'
 
 export default function useEditorEvent (ele, {
   isEnterWrap = true
 } = {}) {
    const store =  useStore()
+   const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
 
   const state = reactive({
        x: 0,
@@ -19,7 +20,7 @@ export default function useEditorEvent (ele, {
   const body = document.body
   function bindEditEvents () {
     ele.value.addEventListener('mousedown', handleMouseDown)
-    ele.value.addEventListener('mousemove', handleMouseMove)
+    ele.value.addEventListener('mousemove', handleMouseMove,true)
     // body.addEventListener('mouseup', handleMouseUp)
   }
 
@@ -29,27 +30,72 @@ export default function useEditorEvent (ele, {
     body.removeEventListener('mouseup', handleMouseUp)
   }
   function handleMouseDown (event) {
-      console.log('editor');
+    console.log('editor');
     state.target = event.target
+    console.log(state.target);
+    console.log(state.target.getBoundingClientRect());
+    console.log(getOffSet(state.target));
+    console.log(hoverEleList.value);
+    if(hoverEleList.value.length===0){
+        store.commit(COMMITS.SET_SELECT_ID,'')
+
+        return 
+    }else{
+        const {id} = hoverEleList.value[hoverEleList.value.length-1]
+        store.commit(COMMITS.SET_SELECT_ID,id)
+    }
+
+
   }
   function handleMouseMove (event) {
     state.target = event.target
-    const pointerInfo = {
-        x:event.offsetX,
-        y:event.offsetY,
+    const dataId = state.target.getAttribute('data-id')
+    const offset = getOffSet(state.target)
+    let pointerInfo = {
+        x:event.offsetX+offset.left,
+        y:event.offsetY+offset.top,
+        mX:event.pageX,
+        mY:event.pageY,
+        clientX:event.clientX,
+        clientY:event.clientY,
+    }
+    if(dataId === 'mask'){
+        pointerInfo = {
+            mX:event.pageX,
+            mY:event.pageY,
+            clientX:event.clientX,
+            clientY:event.clientY,
+        }
     }
     store.commit(COMMITS.SET_POINTER_INFO,pointerInfo)
-    console.log(event.pageX);
-    console.log(event.pageY);
-    console.log(event.clientX);
-    console.log(event.clientY);
-    console.log(event.offsetY);
-    console.log(event.offsetY);
   }
   function handleMouseUp (event) {
     ele.value.removeEventListener('mousemove', handleMouseMove)
   }
+  function getOffSet(curEle){
+    var totalLeft = null,totalTop = null,par = curEle.offsetParent;
+    //首先加自己本身的左偏移和上偏移
+    totalLeft+=curEle.offsetLeft;
+    totalTop+=curEle.offsetTop
+    //只要没有找到body，我们就把父级参照物的边框和偏移也进行累加
+    while(par&&par.getAttribute('data-id')!=='editor_ele_box'){
+      if(navigator.userAgent.indexOf("MSIE 8.0")===-1){
+        //累加父级参照物的边框
+        totalLeft+=par.clientLeft;
+        totalTop+=par.clientTop
+      }
+      
+      //累加父级参照物本身的偏移
+      totalLeft+=par.offsetLeft;
+      totalTop+=par.offsetTop
+      par = par.offsetParent;
+    }
 
+    return{
+      left:totalLeft,
+      top:totalTop
+    }
+  }
   return {
     ...toRefs(state),
     unbindEditEvents,

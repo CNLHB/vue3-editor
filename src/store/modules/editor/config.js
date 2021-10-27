@@ -31,19 +31,92 @@ export const defaultTextData = {
       rotate: 0 // 字体旋转
     }
   }
-  export const defaultImgData = {
-    type: 'img',
-    x: 30, // 画板位置x
-    y: 50, // 画板位置y
-    src:imgUrl,
-    props: {
-      width:100,
-      height:100,
-      opacity: 1, // 透明度
-      rotate: 0, //
-      imgShadows: [] 
+  export const defaultImgData = [
+    {
+      type: 'img',
+      id:1,
+      x: 30, // 画板位置x
+      y: 50, // 画板位置y
+      src:imgUrl,
+      props: {
+        width:100,
+        height:100,
+        opacity: 1, // 透明度
+        rotate: 0, //
+        imgShadows: [] 
+      }
+    },
+    {
+      type: 'img',
+      id:2,
+      x: 300, // 画板位置x
+      y: 500, // 画板位置y
+      src:imgUrl,
+      props: {
+        width:100,
+        height:100,
+        opacity: 1, // 透明度
+        rotate: 0, //
+        imgShadows: [] 
+      }
+    },
+    {
+      type: 'img',
+      id:3,
+      x: 1300, // 画板位置x
+      y: 350, // 画板位置y
+      src:'https://sslstatic.xiaoyusan.com/beta/cmspic/1502457499.jpeg',
+      props: {
+        width:100,
+        height:100,
+        opacity: 1, // 透明度
+        rotate: 0, //
+        imgShadows: [] 
+      }
+    },
+    {
+      type: 'img',
+      id:4,
+      x: 300, // 画板位置x
+      y: 350, // 画板位置y
+      src:'https://sslstatic.xiaoyusan.com/beta/cmspic/1502457499.jpeg',
+      props: {
+        width:100,
+        height:100,
+        opacity: 1, // 透明度
+        rotate: 0, //
+        imgShadows: [] 
+      }
+    },
+    {
+      type: 'img',
+      id:5,
+      x: 320, // 画板位置x
+      y: 350, // 画板位置y
+      src:'https://sslstatic.xiaoyusan.com/beta/cmspic/1502457499.jpeg',
+      props: {
+        width:100,
+        height:100,
+        opacity: 1, // 透明度
+        rotate: 0, //
+        imgShadows: [] 
+      }
+    },
+    {
+      type: 'img',
+      id:6,
+      x: 120, // 画板位置x
+      y: 150, // 画板位置y
+      src:'https://sslstatic.xiaoyusan.com/beta/cmspic/1502457499.jpeg',
+      props: {
+        width:100,
+        height:100,
+        opacity: 1, // 透明度
+        rotate: 0, //
+        imgShadows: [] 
+      }
     }
-  }
+  ]
 
 const canvas = {
 

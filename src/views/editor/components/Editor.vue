@@ -4,7 +4,8 @@
       id="editorCanvas"
     />
 
-    <!-- <ScaleBar /> -->
+    <ScaleBar />
+
     <!-- <ContextMenu /> -->
 
   </div>
@@ -14,9 +15,11 @@
 import { onMounted, reactive,toRefs,toRef } from 'vue';
 import useEditorEvent from '../hooks/use-editor-event';
 import Canvas from './Canvas.vue';
+import ScaleBar from './ScaleBar.vue';
 export default {
     components:{
-        Canvas
+        Canvas,
+        ScaleBar
     },
     setup(props){
       const state = reactive({

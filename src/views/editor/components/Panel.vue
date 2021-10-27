@@ -1,6 +1,11 @@
 <!--  -->
 <template>
   <div class="pancel_wrap">
+    {{hoverEleList}}
+      <div class="position_mxmy">
+        <div>mx: {{pointerInfo.mX}}</div>
+        <div>my: {{pointerInfo.mY}}</div>
+      </div>
       <div class="position_xy">
         <div>x: {{pointerInfo.x}}</div>
         <div>y: {{pointerInfo.y}}</div>
@@ -11,18 +16,21 @@
 <script>
 import { reactive, toRefs ,computed} from 'vue'
 import { useStore } from 'vuex'
+import { GETTERS } from '@commits/editor'
 
 export default {
 
     setup(props){
       const store = useStore()
       const pointerInfo =  computed(()=>store.state.editor.pointerInfo)
+      const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
       const state = reactive({
 
       })
       return {
         ...toRefs(state),
-        pointerInfo
+        pointerInfo,
+        hoverEleList
       }
     }
 }
@@ -38,6 +46,13 @@ export default {
     width: 100%;
     position: absolute;
     bottom: 50px;
+  }
+  .position_mxmy{
+        display: flex;
+    justify-content: space-around;
+    width: 100%;
+    position: absolute;
+    bottom: 100px;
   }
 }
 </style>
