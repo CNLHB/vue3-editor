@@ -1,7 +1,6 @@
 <!--  -->
 <template>
   <div class="pancel_wrap">
-    {{hoverEleList}}
       <div class="position_mxmy">
         <div>mx: {{pointerInfo.mX}}</div>
         <div>my: {{pointerInfo.mY}}</div>

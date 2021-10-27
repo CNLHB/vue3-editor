@@ -11,8 +11,8 @@ const state = () => {
     },
     title: '',
     curCanvas: {
-      width: 1500, // 画板宽
-      height: 1500, // 画板高
+      width: 500, // 画板宽
+      height: 500, // 画板高
       bgImage: '', // 画板背景图
       bgColor: {
         type: 'linear',

@@ -32,9 +32,8 @@ export default function useEditorEvent (ele, {
   function handleMouseDown (event) {
     console.log('editor');
     state.target = event.target
-    console.log(state.target);
-    console.log(state.target.getBoundingClientRect());
-    console.log(getOffSet(state.target));
+    // console.log(state.target);
+    // console.log(state.target.getBoundingClientRect());
     console.log(hoverEleList.value);
     if(hoverEleList.value.length===0){
         store.commit(COMMITS.SET_SELECT_ID,'')
