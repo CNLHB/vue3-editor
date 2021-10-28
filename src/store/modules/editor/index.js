@@ -1,13 +1,16 @@
 import { cloneDeep } from "lodash"
 import { forEach } from "@/utils"
 import { defaultImgData } from "./config"
+import { createPointer } from "../../../utils/domUtils"
 const state = () => {
   return {
     pointerInfo:{
       x:0,
       y:0,
       mX:0,
-      mY:0
+      mY:0,
+      cx:0,
+      cy:0
     },
     title: '',
     curCanvas: {
@@ -41,7 +44,8 @@ const state = () => {
     canvasScaleRatio: 1,
     materialPanelWidth: 60,
     selectId:'',
-    selectIds:[]
+    selectIds:[],
+    isDagger: false
     
   }
 }
@@ -99,7 +103,12 @@ const getters = {
     const copyCurCanvas = cloneDeep(state.curCanvas)
     const { element } = copyCurCanvas || {}
     return element.find(item=>String(item.id)===String(state.selectId))
-  }
+  },
+  getDaggerPointers(state){
+    const copyCurCanvas = cloneDeep(state.curCanvas)
+    const { element } = copyCurCanvas || {}
+    return createPointer(element.find(item=>String(item.id)===String(state.selectId)))
+  },
 }
 
 const mutations = {

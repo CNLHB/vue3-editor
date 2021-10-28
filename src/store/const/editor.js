@@ -160,6 +160,7 @@ const GROUP_SELECT_ELE_DATA = 'editor/groupSelectEleData'
 
 const HOVER_ELE_LIST = 'editor/hoverEleList'
 const SELECT_INFO = 'editor/selectInfo'
+const GET_DAGGER_POINTERS = 'editor/getDaggerPointers'
 
 export const GETTERS = {
   VIEW_CANVAS,
@@ -171,7 +172,8 @@ export const GETTERS = {
   IS_PRESS_CLICK,
   GROUP_SELECT_ELE_DATA,
   HOVER_ELE_LIST,
-  SELECT_INFO
+  SELECT_INFO,
+  GET_DAGGER_POINTERS
 }
 
 // 更新选择框、hover框样式

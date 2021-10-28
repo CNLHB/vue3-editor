@@ -1,9 +1,13 @@
 <!--  -->
 <template>
-  <div class="editor_wrap gb_scroll" ref="editorRef" >
+  <div class="editor_wrap gb_scroll" ref="editorRef">
     <div class="editor_wrap_box gb_scroll layout_center">
       <div class="editor_cnt_box">
-        <div class="editor_ele_box" data-id="editor_ele_box" :style="editorStyle">
+        <div
+          class="editor_ele_box"
+          data-id="editor_ele_box"
+          :style="editorStyle"
+        >
           <!-- <div class="editor_bg" :style="paletteBgInfo?.style"></div> -->
           <div class="editor_eles_wrap">
             <template v-for="item in canvasData.element" :key="item.id">
@@ -12,13 +16,25 @@
           </div>
         </div>
         <div class="editor_select_box">
-          <div class="editor_ele_hover" :style="hoverStyle">
+          <div class="editor_ele_hover">
+            <!-- :style="hoverStyle" -->
             <!-- <div v-if="isEleHoverLayerLock" class="editor_ele_select_lock_text">图层已锁定</div> -->
           </div>
-          <div class="editor_ele_select" :style="selectStyle"></div>
+          <!--  :style="selectStyle" -->
+          <div class="editor_ele_select">
+            <div
+              class="dagger_pointer"
+              :data-id="'dot_'+index"
+              v-for="(pointer, index) in daggerPointer"
+              :key="index"
+              :style="{ left: pointer.x-6 + 'px', top: pointer.y-6 + 'px' }"
+              @mousedown="handleClick(index,$event)"
+              @mousemove="handleMouseMove"
+            ></div>
+          </div>
         </div>
       </div>
-      
+
       <div class="mask" data-id="mask"></div>
     </div>
   </div>
@@ -40,28 +56,29 @@ export default {
     const store = useStore()
 
     const canvasScaleRatio = computed(() => store.state.editor.canvasScaleRatio)
-    const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
-    const selectInfo =  computed(()=>store.getters[GETTERS.SELECT_INFO])
+    const hoverEleList = computed(() => store.getters[GETTERS.HOVER_ELE_LIST])
+    const selectInfo = computed(() => store.getters[GETTERS.SELECT_INFO])
     const viewCanvas = computed(() => store.getters[GETTERS.VIEW_CANVAS])
+    const daggerPointer = computed(() => store.getters[GETTERS.GET_DAGGER_POINTERS])
     const hoverStyle = computed(() => {
-        if(hoverEleList.value.length===0)return {display:'none'}
-        const {x,y,props} = hoverEleList.value[hoverEleList.value.length-1]
-        return {
-            left:x+'px',
-            top:y+'px',
-            width:props.width+'px',
-            height:props.height+'px'
-        }
+      if (hoverEleList.value.length === 0) return { display: 'none' }
+      const { x, y, props } = hoverEleList.value[hoverEleList.value.length - 1]
+      return {
+        left: x + 'px',
+        top: y + 'px',
+        width: props.width + 'px',
+        height: props.height + 'px',
+      }
     })
-        const selectStyle = computed(() => {
-        if(!selectInfo.value)return {}
-        const {x,y,props} = selectInfo.value
-        return {
-            left:x+'px',
-            top:y+'px',
-            width:props.width+'px',
-            height:props.height+'px'
-        }
+    const selectStyle = computed(() => {
+      if (!selectInfo.value) return {}
+      const { x, y, props } = selectInfo.value
+      return {
+        left: x + 'px',
+        top: y + 'px',
+        width: props.width + 'px',
+        height: props.height + 'px',
+      }
     })
     // const preViewCanvas = computed(() => store.getters[GETTERS.PREVIEW_CANVAS])
     const canvasData = computed(() => {
@@ -86,13 +103,12 @@ export default {
     function clickhandle(event) {
       console.log(event)
     }
-        function handleClick(event){
-        event.stopPropagation();
-        
+    function handleClick(id,event) {
+      event.stopPropagation()
+      console.log(id);
     }
-    function handleMouseMove(event){
-        event.stopPropagation();
-        
+    function handleMouseMove(event) {
+      event.stopPropagation()
     }
     return {
       ...toRefs(state),
@@ -102,7 +118,8 @@ export default {
       handleClick,
       handleMouseMove,
       hoverStyle,
-      selectStyle
+      selectStyle,
+      daggerPointer,
     }
   },
 }
@@ -157,7 +174,7 @@ export default {
 
 .editor_select_box {
   pointer-events: initial;
-  .editor_ele_hover{
+  .editor_ele_hover {
     position: absolute;
     left: 0;
     right: 0;
@@ -165,18 +182,23 @@ export default {
     top: 0;
     pointer-events: none;
     z-index: 10;
+    box-sizing: border-box;
     border: 1px solid @hoverColor;
   }
   .editor_ele_select {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    pointer-events: none;
-    z-index: 10;
-    border: 1px solid @hoverColor;
+    .editor_ele_hover
   }
+   .dagger_pointer {
+      position: absolute;
+      background: #fff;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid @hoverColor;
+      box-sizing: border-box;
+      pointer-events: initial;
+      cursor: pointer;
+    }
 }
 
 .mask {

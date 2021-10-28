@@ -84,7 +84,7 @@ export const defaultTextData = {
         width:100,
         height:100,
         opacity: 1, // 透明度
-        rotate: 0, //
+        rotate: 30, //
         imgShadows: [] 
       }
     },
@@ -112,7 +112,7 @@ export const defaultTextData = {
         width:100,
         height:100,
         opacity: 1, // 透明度
-        rotate: 0, //
+        rotate: 45, //
         imgShadows: [] 
       }
     }

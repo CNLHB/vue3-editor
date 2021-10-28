@@ -7,6 +7,7 @@ export default function useEditorEvent (ele, {
 } = {}) {
    const store =  useStore()
    const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
+   const isDagger =  computed(()=>store.state.editor.isDagger)
 
   const state = reactive({
        x: 0,
@@ -21,7 +22,6 @@ export default function useEditorEvent (ele, {
   function bindEditEvents () {
     ele.value.addEventListener('mousedown', handleMouseDown)
     ele.value.addEventListener('mousemove', handleMouseMove,true)
-    // body.addEventListener('mouseup', handleMouseUp)
   }
 
   function unbindEditEvents () {
@@ -46,6 +46,7 @@ export default function useEditorEvent (ele, {
 
 
   }
+  const ignoreEle = ['mask','dot_']
   function handleMouseMove (event) {
     state.target = event.target
     const dataId = state.target.getAttribute('data-id')
@@ -57,14 +58,20 @@ export default function useEditorEvent (ele, {
         mY:event.pageY,
         clientX:event.clientX,
         clientY:event.clientY,
+        cx:event.offsetX+offset.left,
+        cy:event.offsetY+offset.top,
+
     }
-    if(dataId === 'mask'){
-        pointerInfo = {
-            mX:event.pageX,
-            mY:event.pageY,
-            clientX:event.clientX,
-            clientY:event.clientY,
-        }
+    //||isDagger
+    if(ignoreEle.some(item=>item===dataId||(dataId&&dataId.startsWith(item)))){
+        delete pointerInfo.x
+        delete pointerInfo.y
+        
+    }
+    if(isDagger.value){
+        delete pointerInfo.x
+        delete pointerInfo.y
+        
     }
     store.commit(COMMITS.SET_POINTER_INFO,pointerInfo)
   }

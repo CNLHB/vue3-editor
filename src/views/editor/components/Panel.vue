@@ -1,13 +1,14 @@
 <!--  -->
 <template>
   <div class="pancel_wrap">
+    {{daggerPointer}}
       <div class="position_mxmy">
         <div>mx: {{pointerInfo.mX}}</div>
         <div>my: {{pointerInfo.mY}}</div>
       </div>
       <div class="position_xy">
-        <div>x: {{pointerInfo.x}}</div>
-        <div>y: {{pointerInfo.y}}</div>
+        <div>x: {{pointerInfo.cx}}</div>
+        <div>y: {{pointerInfo.cy}}</div>
       </div>
   </div>
 </template>
@@ -23,13 +24,16 @@ export default {
       const store = useStore()
       const pointerInfo =  computed(()=>store.state.editor.pointerInfo)
       const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
+      const daggerPointer = computed(() => store.getters[GETTERS.GET_DAGGER_POINTERS])
+
       const state = reactive({
 
       })
       return {
         ...toRefs(state),
         pointerInfo,
-        hoverEleList
+        hoverEleList,
+        daggerPointer
       }
     }
 }
