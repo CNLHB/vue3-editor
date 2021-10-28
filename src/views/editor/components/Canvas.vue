@@ -3,6 +3,9 @@
   <div class="editor_wrap gb_scroll" ref="editorRef">
     <div class="editor_wrap_box gb_scroll layout_center">
       <div class="editor_cnt_box">
+        <div class="editor_cnt_bg">
+          <CanvasGrid></CanvasGrid>
+        </div>
         <div
           class="editor_ele_box"
           data-id="editor_ele_box"
@@ -24,11 +27,11 @@
           <div class="editor_ele_select">
             <div
               class="dagger_pointer"
-              :data-id="'dot_'+index"
+              :data-id="'dot_' + index"
               v-for="(pointer, index) in daggerPointer"
               :key="index"
-              :style="{ left: pointer.x-6 + 'px', top: pointer.y-6 + 'px' }"
-              @mousedown="handleClick(index,$event)"
+              :style="{ left: pointer.x - 6 + 'px', top: pointer.y - 6 + 'px' }"
+              @mousedown="handleClick(index, $event)"
               @mousemove="handleMouseMove"
             ></div>
           </div>
@@ -41,74 +44,80 @@
 </template>
 
 <script>
-import { onMounted, computed, reactive, toRefs, toRef } from 'vue'
-import { GETTERS } from '@commits/editor'
-import useEleEvent from '../hooks/usr-ele-event'
-import EleItem from './EleItem.vue'
+import { onMounted, computed, reactive, toRefs, toRef } from "vue";
+import { GETTERS } from "@commits/editor";
+import useEleEvent from "../hooks/usr-ele-event";
+import EleItem from "./EleItem.vue";
+import CanvasGrid from "./canvas-grid/index.vue";
 
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 
 export default {
   components: {
     EleItem,
+    CanvasGrid,
   },
   setup(props) {
-    const store = useStore()
+    const store = useStore();
 
-    const canvasScaleRatio = computed(() => store.state.editor.canvasScaleRatio)
-    const hoverEleList = computed(() => store.getters[GETTERS.HOVER_ELE_LIST])
-    const selectInfo = computed(() => store.getters[GETTERS.SELECT_INFO])
-    const viewCanvas = computed(() => store.getters[GETTERS.VIEW_CANVAS])
-    const daggerPointer = computed(() => store.getters[GETTERS.GET_DAGGER_POINTERS])
+    const canvasScaleRatio = computed(
+      () => store.state.editor.canvasScaleRatio
+    );
+    const hoverEleList = computed(() => store.getters[GETTERS.HOVER_ELE_LIST]);
+    const selectInfo = computed(() => store.getters[GETTERS.SELECT_INFO]);
+    const viewCanvas = computed(() => store.getters[GETTERS.VIEW_CANVAS]);
+    const daggerPointer = computed(
+      () => store.getters[GETTERS.GET_DAGGER_POINTERS]
+    );
     const hoverStyle = computed(() => {
-      if (hoverEleList.value.length === 0) return { display: 'none' }
-      const { x, y, props } = hoverEleList.value[hoverEleList.value.length - 1]
+      if (hoverEleList.value.length === 0) return { display: "none" };
+      const { x, y, props } = hoverEleList.value[hoverEleList.value.length - 1];
       return {
-        left: x + 'px',
-        top: y + 'px',
-        width: props.width + 'px',
-        height: props.height + 'px',
-      }
-    })
+        left: x + "px",
+        top: y + "px",
+        width: props.width + "px",
+        height: props.height + "px",
+      };
+    });
     const selectStyle = computed(() => {
-      if (!selectInfo.value) return {}
-      const { x, y, props } = selectInfo.value
+      if (!selectInfo.value) return {};
+      const { x, y, props } = selectInfo.value;
       return {
-        left: x + 'px',
-        top: y + 'px',
-        width: props.width + 'px',
-        height: props.height + 'px',
-      }
-    })
+        left: x + "px",
+        top: y + "px",
+        width: props.width + "px",
+        height: props.height + "px",
+      };
+    });
     // const preViewCanvas = computed(() => store.getters[GETTERS.PREVIEW_CANVAS])
     const canvasData = computed(() => {
       //   if (type.value === 'view') {
       //     return preViewCanvas.value
       //   }
 
-      return viewCanvas.value
-    })
+      return viewCanvas.value;
+    });
     const state = reactive({
       editorRef: null,
       editorStyle: {
-        width: canvasData.value.width + 'px',
-        height: canvasData.value.height + 'px',
+        width: canvasData.value.width + "px",
+        height: canvasData.value.height + "px",
       },
-    })
+    });
 
-    const { bindEditEvents } = useEleEvent(toRef(state, 'editorRef'))
+    const { bindEditEvents } = useEleEvent(toRef(state, "editorRef"));
     onMounted(() => {
       // bindEditEvents()
-    })
+    });
     function clickhandle(event) {
-      console.log(event)
+      console.log(event);
     }
-    function handleClick(id,event) {
-      event.stopPropagation()
+    function handleClick(id, event) {
+      event.stopPropagation();
       console.log(id);
     }
     function handleMouseMove(event) {
-      event.stopPropagation()
+      event.stopPropagation();
     }
     return {
       ...toRefs(state),
@@ -120,9 +129,9 @@ export default {
       hoverStyle,
       selectStyle,
       daggerPointer,
-    }
+    };
   },
-}
+};
 </script>
 <style lang='less' scoped>
 .editor_wrap {
@@ -146,12 +155,20 @@ export default {
   display: inline-block;
   white-space: normal;
   box-sizing: border-box;
+  background: #fff;
+  .editor_cnt_bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
 }
 .editor_ele_box {
   display: inline-block;
   width: 500px;
   height: 750px;
-  background: #fff;
   box-shadow: 0 0 20px rgb(0 0 0 / 10%);
   // 配合layout_center实现水平垂直居中
   vertical-align: middle;
@@ -165,7 +182,7 @@ export default {
 .layout_center {
   text-align: center;
   &:after {
-    content: '';
+    content: "";
     display: inline-block;
     height: 100%;
     vertical-align: middle;
@@ -186,19 +203,19 @@ export default {
     border: 1px solid @hoverColor;
   }
   .editor_ele_select {
-    .editor_ele_hover
+    .editor_ele_hover;
   }
-   .dagger_pointer {
-      position: absolute;
-      background: #fff;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 1px solid @hoverColor;
-      box-sizing: border-box;
-      pointer-events: initial;
-      cursor: pointer;
-    }
+  .dagger_pointer {
+    position: absolute;
+    background: #fff;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid @hoverColor;
+    box-sizing: border-box;
+    pointer-events: initial;
+    cursor: pointer;
+  }
 }
 
 .mask {
