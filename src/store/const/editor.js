@@ -4,6 +4,10 @@
 
 // 更新文档标题
 const SET_DOC_TITLE = 'editor/setDocTitle'
+// 更新文档标题
+const SET_POINTER_INFO = 'editor/setPointerInfo'
+// 设置选择元素ID
+const SET_SELECT_ID = 'editor/setSelectId'
 
 // 更新选择框样式
 const UPDATE_SELECT_STYLE = 'editor/updateSelectStyle'
@@ -122,7 +126,9 @@ export const COMMITS = {
   SET_PRESS_KEYS,
   SET_GROUP_SELECT_ELE_ID,
   SET_GROUP_SELECT_ELE_STYLE,
-  SET_DOC_TITLE
+  SET_DOC_TITLE,
+  SET_POINTER_INFO,
+  SET_SELECT_ID
 }
 
 /**
@@ -152,6 +158,10 @@ const IS_PRESS_CLICK = 'editor/isPressClick'
 
 const GROUP_SELECT_ELE_DATA = 'editor/groupSelectEleData'
 
+const HOVER_ELE_LIST = 'editor/hoverEleList'
+const SELECT_INFO = 'editor/selectInfo'
+const GET_DAGGER_POINTERS = 'editor/getDaggerPointers'
+
 export const GETTERS = {
   VIEW_CANVAS,
   PREVIEW_CANVAS,
@@ -160,7 +170,10 @@ export const GETTERS = {
   CANVAS_REAL_SIZE,
   SEL_ELE_INFO,
   IS_PRESS_CLICK,
-  GROUP_SELECT_ELE_DATA
+  GROUP_SELECT_ELE_DATA,
+  HOVER_ELE_LIST,
+  SELECT_INFO,
+  GET_DAGGER_POINTERS
 }
 
 // 更新选择框、hover框样式

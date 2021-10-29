@@ -1,12 +1,21 @@
 import { cloneDeep } from "lodash"
+import { forEach } from "@/utils"
 import { defaultImgData } from "./config"
-
+import { createPointer } from "../../../utils/domUtils"
 const state = () => {
   return {
+    pointerInfo:{
+      x:0,
+      y:0,
+      mX:0,
+      mY:0,
+      cx:0,
+      cy:0
+    },
     title: '',
     curCanvas: {
-      width: 750, // 画板宽
-      height: 1334, // 画板高
+      width: 500, // 画板宽
+      height: 500, // 画板高
       bgImage: '', // 画板背景图
       bgColor: {
         type: 'linear',
@@ -30,10 +39,13 @@ const state = () => {
           }
         ]
       }, // 画板背景色
-      element: [defaultImgData],
+      element: defaultImgData?defaultImgData:[],
     },
     canvasScaleRatio: 1,
     materialPanelWidth: 60,
+    selectId:'',
+    selectIds:[],
+    isDagger: false
     
   }
 }
@@ -46,7 +58,6 @@ const getters = {
     if (!Array.isArray(element)) {
       return state.curCanvas
     }
-
     const ratio = PREVIEW_WIDTH / state.curCanvas.palette.width
 
     // const copyElement = getRatioElements(element, ratio)
@@ -70,6 +81,34 @@ const getters = {
 
     return copyCurCanvas
   },
+  hoverEleList(state){
+    const copyCurCanvas = cloneDeep(state.curCanvas)
+    const {x,y} = cloneDeep(state.pointerInfo)
+    const { element } = copyCurCanvas || {}
+    let container = element.filter(item=>{
+        let l = item.x + item.props.width
+        let t = item.y + item.props.height
+        // console.log(x);
+        // console.log(y);
+        // console.log(t);
+        // console.log(t);
+        if(x>=item.x&&x<=l&&y>item.y&&y<=t){
+          return true
+        }
+        return false
+    })
+    return container
+  },
+  selectInfo(state){
+    const copyCurCanvas = cloneDeep(state.curCanvas)
+    const { element } = copyCurCanvas || {}
+    return element.find(item=>String(item.id)===String(state.selectId))
+  },
+  getDaggerPointers(state){
+    const copyCurCanvas = cloneDeep(state.curCanvas)
+    const { element } = copyCurCanvas || {}
+    return createPointer(element.find(item=>String(item.id)===String(state.selectId)))
+  },
 }
 
 const mutations = {
@@ -80,6 +119,14 @@ const mutations = {
     console.log(width);
     state.materialPanelWidth = width
   },
+  setPointerInfo(state,pointerInfo){
+    forEach(pointerInfo,(item,value)=>{
+      state.pointerInfo[item] = value
+    })
+  },
+  setSelectId(state,selectId){
+    state.selectId = selectId
+  }
 }
 
 const actions = {}

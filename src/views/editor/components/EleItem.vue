@@ -5,6 +5,8 @@
     :class="{
       'ele_type_img': item.type === 'img',
       'ele_type_text': item.type === 'text',
+      'ele_selected': item.id === selectId,
+      'ele_hovered': item.id === isHover,
     }"
     ref="eleRef"
     :style="renderEleStyle(item)"
@@ -15,9 +17,11 @@
     </div>
 </template>
 <script>
-import { reactive} from 'vue'
+import { reactive,computed} from 'vue'
 import { toRefs } from '@vueuse/shared'
 import { renderEleStyle } from '../methods'
+import { useStore } from 'vuex'
+import { GETTERS } from '@commits/editor'
 export default {
     props:{
        item:Object,
@@ -26,12 +30,23 @@ export default {
        } 
     },
     setup(props,{emit}){
+        const store = useStore()
+        const selectId =  computed(()=>store.state.editor.selectId)
+        const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
+        const isHover =  computed(()=>{
+                    if(hoverEleList.value.length===0)return ''
+        const {id} = hoverEleList.value[hoverEleList.value.length-1]
+        return id
+        })
+
         const state = reactive({
             eleRef:null
         })
         return {
             ...toRefs(state),
-            renderEleStyle
+            renderEleStyle,
+            selectId,
+            isHover
         }
 
     }
@@ -60,6 +75,11 @@ export default {
 }
 
 .ele_selected {
-  cursor: move;
+   box-sizing: border-box;
+   border: 1px solid @hoverColor;
+   cursor: move;
+}
+.ele_hovered {
+   border: 1px solid @hoverColor;
 }
 </style>
