@@ -5,6 +5,7 @@ npm install
 npm run dev 
 add hook test
 add hook test
+add hook test
 ```
 open:
  http://localhost:3000/editor/index
