@@ -24,7 +24,7 @@
             <!-- <div v-if="isEleHoverLayerLock" class="editor_ele_select_lock_text">图层已锁定</div> -->
           </div>
           <!--  :style="selectStyle" -->
-          <div class="editor_ele_select">
+          <div class="editor_ele_select" :class="{select_box:!selectId}">
             <div
               class="dagger_pointer"
               :data-id="'dot_' + index"
@@ -64,6 +64,7 @@ export default {
       () => store.state.editor.canvasScaleRatio
     );
     const hoverEleList = computed(() => store.getters[GETTERS.HOVER_ELE_LIST]);
+    const selectId = computed(() => store.state.editor.selectId);
     const selectInfo = computed(() => store.getters[GETTERS.SELECT_INFO]);
     const viewCanvas = computed(() => store.getters[GETTERS.VIEW_CANVAS]);
     const daggerPointer = computed(
@@ -129,6 +130,7 @@ export default {
       hoverStyle,
       selectStyle,
       daggerPointer,
+      selectId
     };
   },
 };
@@ -200,10 +202,15 @@ export default {
     pointer-events: none;
     z-index: 10;
     box-sizing: border-box;
-    border: 1px solid @hoverColor;
   }
+
   .editor_ele_select {
     .editor_ele_hover;
+    &.select_box{
+      border: 1px solid @hoverColor;
+
+    }
+
   }
   .dagger_pointer {
     position: absolute;

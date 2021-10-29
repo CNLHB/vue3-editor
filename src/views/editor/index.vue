@@ -29,7 +29,6 @@ import SideBar from "./components/SideBar/index.vue";
 import ToolBar from "./components/ToolBar.vue";
 import SideBarAside from "./components/SideBarAside/index.vue";
 import { useStore } from "vuex";
-
 const store = useStore()
 const theme = ref("#2183FE");
 

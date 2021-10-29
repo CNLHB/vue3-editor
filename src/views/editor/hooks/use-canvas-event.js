@@ -5,6 +5,7 @@ export default function useCanvasEvent (ele, {
   isEnterWrap = true
 } = {}) {
    const store =  useStore()
+
   const state = reactive({
        x: 0,
        y: 0,

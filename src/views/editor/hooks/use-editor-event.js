@@ -21,7 +21,7 @@ export default function useEditorEvent (ele, {
   const body = document.body
   function bindEditEvents () {
     ele.value.addEventListener('mousedown', handleMouseDown)
-    ele.value.addEventListener('mousemove', handleMouseMove,true)
+    body.addEventListener('mousemove', handleMouseMove,true)
   }
 
   function unbindEditEvents () {
