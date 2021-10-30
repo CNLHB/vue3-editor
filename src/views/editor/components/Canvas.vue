@@ -29,8 +29,9 @@
               class="dagger_pointer"
               :data-id="'dot_' + index"
               v-for="(pointer, index) in daggerPointer"
+              draggable="false"
               :key="index"
-              :style="{ left: pointer.x - 6 + 'px', top: pointer.y - 6 + 'px' }"
+              :style="{ left: pointer.x - 6 + 'px', top: pointer.y - 6 + 'px',cursor: pointer.cursor }"
               @mousedown="handleClick(index, $event)"
               @mousemove="handleMouseMove"
             ></div>

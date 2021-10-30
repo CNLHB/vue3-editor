@@ -18,12 +18,12 @@ const state = () => {
     },
     title: '',
     curCanvas: {
-      width: 500, // 画板宽
-      height: 500, // 画板高
+      width: 1500, // 画板宽
+      height: 1500, // 画板高
       bgImage: '', // 画板背景图
       bgColor: {
         type: 'linear',
-        style: 'background: #ffffff',
+        style: 'background-image: linear-gradient(90deg, rgba(0, 245, 255, 1) 0%,rgba(31, 0, 255, 1) 100%);',
         color: {
           hex: '#ffffff',
           rgba: { r: 0, g: 0, b: 0, a: 1 },
@@ -185,7 +185,7 @@ const mutations = {
     const { id, x, y } = copyElement || {}
     copyElement.x = x / state.canvasScaleRatio
     copyElement.y = y / state.canvasScaleRatio
-    updateIndex = element.findIndex(item=>Number(item.id)===Number(id))
+    updateIndex = element.findIndex(item=>String(item.id)===String(id))
     if(updateIndex===-1){
 
     }else{

@@ -3,8 +3,9 @@ import imgUrl from '../../../assets/images/logo.png'
 
 export const defaultTextData = {
     type: 'text',
-    x: 0, // 文本框画板位置x
-    y: 0, // 文本框画板位置y
+    id:'t_1',
+    x: 200, // 文本框画板位置x
+    y: 100, // 文本框画板位置y
     props: {
       // width: 111, // 文本框宽
       // height: 111, // 文本框高
@@ -14,7 +15,7 @@ export const defaultTextData = {
         previewUrl: 'https://sslstatic.xiaoyusan.com/dev/huatuo_auth/1502429822.png',
         sourceUrl: 'https://sslstatic.xiaoyusan.com/dev/course/aiwa_1625818028_SourceHanSansCN-Bold.otf'
       }, // 字体
-      fontSize: 90, // 字号大小
+      fontSize: 16, // 字号大小
       fontWeight: 'normal', // 字体粗细
       fontStyle: 'normal', // 字体样式，斜体：italic
       textDecoration: '', // 字体装饰，下划线： underline；中划线：line-through
@@ -28,22 +29,47 @@ export const defaultTextData = {
       text: '双击编辑文本', // 文本内容
       textContent: '双击编辑文本', // 纯文本内容，text 有些会有dom结构
       opacity: 1, // 字体透明度
+      width:200,
+      height:50,
       rotate: 0 // 字体旋转
     }
   }
   export const defaultImgData = [
+    defaultTextData,
     {
       type: 'img',
       id:1,
       x: 30, // 画板位置x
       y: 50, // 画板位置y
       src:imgUrl,
+      // 图片原始信息
+      prePic:{
+        height: 500,
+        src: "https://sslstatic.xiaoyusan.com/beta/huatuo_auth/1502455038.webp",
+        width: 500
+      },
       props: {
         width:100,
         height:100,
         opacity: 1, // 透明度
         rotate: 100, //
-        imgShadows: [] 
+        imgShadows: [{
+          spread: 0,
+          x: 0,
+          y: 4,
+          blur: 23,
+          color:[{
+            color: "rgba(0, 255, 245, 0.73)",
+            hex: "#00FFF5",
+            rgba:{
+              a: 0.73,
+              b: 245,
+              g: 255,
+              r: 0
+            }
+          }]
+
+        }] 
       }
     },
     {
@@ -112,12 +138,34 @@ export const defaultTextData = {
         width:100,
         height:100,
         opacity: 1, // 透明度
-        rotate: 45, //
+        rotate: 0, //
         imgShadows: [] 
       }
     }
   ]
-
+export const shape = {
+  type: 'shape',
+  id:6,
+  x: 120, // 画板位置x
+  y: 150, // 画板位置y
+  src:'https://sslstatic.xiaoyusan.com/beta/cmspic/1502457499.jpeg',
+  props: {
+    height: 400,
+    width: 400,
+    opacity: 1,
+    radius: 0,
+    rotate: 0,
+    shadows: [],
+    shape: "rectangle",
+    bgColor:{
+      color: {hex: '#A6DBF8', rgba: {}, color: 'rgba(166, 219, 248, 1)'},
+      colors: (2) [{}, {}],
+      deg: 90,
+      style: "background: #A6DBF8",
+      type: "linear"
+    }
+  }
+}
 const canvas = {
 
 }

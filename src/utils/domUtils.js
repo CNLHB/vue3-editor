@@ -35,14 +35,14 @@ export const createPointer = (ele) => {
   //   { x: x + props.width, y: y + props.height, visible: true },
   // ];
   const arr = [
-    { ...rotation(x,y,rotateX,rotateY,angle), visible: true },
-    { ...rotation(x + props.width / 2,y,rotateX,rotateY,angle), visible: true },
-    { ...rotation(x + props.width,y,rotateX,rotateY,angle), visible: true },
-    {...rotation(x ,y+ props.height / 2,rotateX,rotateY,angle), visible: true },
-    { ...rotation(x+ props.width ,y+ props.height / 2,rotateX,rotateY,angle), visible: true },
-    {...rotation(x,y+ props.height ,rotateX,rotateY,angle),visible: true },
-    { ...rotation(x+ props.width / 2,y+ props.height ,rotateX,rotateY,angle), visible: true },
-    {...rotation(x+ props.width,y+ props.height ,rotateX,rotateY,angle), visible: true },
+    { ...rotation(x,y,rotateX,rotateY,angle), visible: true,cursor:'nwse-resize' },
+    { ...rotation(x + props.width / 2,y,rotateX,rotateY,angle), visible: true ,cursor:'ns-resize' },
+    { ...rotation(x + props.width,y,rotateX,rotateY,angle), visible: true ,cursor:'nesw-resize' },
+    {...rotation(x ,y+ props.height / 2,rotateX,rotateY,angle), visible: true ,cursor:'ew-resize' },
+    { ...rotation(x+ props.width ,y+ props.height / 2,rotateX,rotateY,angle), visible: true ,cursor:'ew-resize' },
+    {...rotation(x,y+ props.height ,rotateX,rotateY,angle),visible: true ,cursor:'nesw-resize' },
+    { ...rotation(x+ props.width / 2,y+ props.height ,rotateX,rotateY,angle), visible: true ,cursor:'ns-resize' },
+    {...rotation(x+ props.width,y+ props.height ,rotateX,rotateY,angle), visible: true ,cursor:'nwse-resize' },
   ];
   return arr;
 };
