@@ -2,7 +2,10 @@ import { reactive, toRefs } from 'vue'
 
 export default function useDraggle (onDragStar, onDragMove, onDragDone, useCapture = false) {
   const state = reactive({
-    mouseStartPst: {},
+    mouseStartPst: {
+      x:0,
+      y:0,
+    },
     movePst: {
       x: 0,
       y: 0

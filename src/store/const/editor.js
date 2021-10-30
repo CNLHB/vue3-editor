@@ -9,6 +9,14 @@ const SET_POINTER_INFO = 'editor/setPointerInfo'
 // 设置选择元素ID
 const SET_SELECT_ID = 'editor/setSelectId'
 
+// 元素拖拽中
+const SET_IS_DAGGER = 'editor/setIsDagger'
+
+// 更新当前画布元素数据
+const UPDATE_CUR_CANVAS_ELEMENT = 'editor/updateCurCanvasElement'
+// 拖拽元素
+const DAGGER_ELE = 'editor/draggerEle'
+
 // 更新选择框样式
 const UPDATE_SELECT_STYLE = 'editor/updateSelectStyle'
 
@@ -33,8 +41,7 @@ const PUSH_HISTORY_REDO = 'editor/pushHistoryRedo'
 // 清理历史记录
 const CLEAR_HISTORY = 'editor/cleareHistory'
 
-// 更新当前画布元素数据
-const UPDATE_CUR_CANVAS_ELEMENT = 'editor/updateCurCanvasElement'
+
 
 // 更新当前画板数据
 const UPDATE_CUR_CANVAS = 'editor/updateCurCanvas'
@@ -128,7 +135,9 @@ export const COMMITS = {
   SET_GROUP_SELECT_ELE_STYLE,
   SET_DOC_TITLE,
   SET_POINTER_INFO,
-  SET_SELECT_ID
+  SET_SELECT_ID,
+  SET_IS_DAGGER,
+  DAGGER_ELE
 }
 
 /**
@@ -194,11 +203,15 @@ const TO_GET_PAGE_DATA = 'editor/getPageData'
 // 历史记录
 const TO_PUSH_HISTORY_UNDO = 'editor/toPushHistoryUndo'
 
+// 设置多选元素id
+const SET_GROUP_SELECT_IDS = 'editor/setSelectId'
+
 export const ACTIONS = {
   TO_UPDATE_OPERATE_SIZE,
   TO_UPDATE_ELE_PROPS,
   TO_SAVE,
   TO_SAVE_AS,
   TO_GET_PAGE_DATA,
-  TO_PUSH_HISTORY_UNDO
+  TO_PUSH_HISTORY_UNDO,
+  SET_GROUP_SELECT_IDS
 }

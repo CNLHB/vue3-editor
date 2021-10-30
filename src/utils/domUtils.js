@@ -19,7 +19,6 @@ export const createPointer = (ele) => {
   const angle = (Math.PI * rotate) / 180
   const rotateX  = x + props.width / 2
   const rotateY  = y + props.height / 2
-  console.log(rotate);
   /**
    * 0  1   2
    * 3      4
@@ -45,6 +44,5 @@ export const createPointer = (ele) => {
     { ...rotation(x+ props.width / 2,y+ props.height ,rotateX,rotateY,angle), visible: true },
     {...rotation(x+ props.width,y+ props.height ,rotateX,rotateY,angle), visible: true },
   ];
-  console.log(arr);
   return arr;
 };

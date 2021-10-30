@@ -12,7 +12,7 @@
     :style="renderEleStyle(item)"
     >
         <div class="ele_content">
-            <img :src="item.src" alt="">
+            <img :src="item.src" draggable="false" alt="">
         </div>
     </div>
 </template>

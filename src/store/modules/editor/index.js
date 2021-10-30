@@ -10,7 +10,11 @@ const state = () => {
       mX:0,
       mY:0,
       cx:0,
-      cy:0
+      cy:0,
+      movePst:{
+        x:0,
+        y:0
+      }
     },
     title: '',
     curCanvas: {
@@ -109,6 +113,7 @@ const getters = {
     const { element } = copyCurCanvas || {}
     return createPointer(element.find(item=>String(item.id)===String(state.selectId)))
   },
+
 }
 
 const mutations = {
@@ -126,10 +131,79 @@ const mutations = {
   },
   setSelectId(state,selectId){
     state.selectId = selectId
+  },
+  setSelectGroupId(state,selectId){
+    if(selectId){
+      state.selectIds.push(selectId)
+    }else{
+      state.selectIds = []
+    }
+  },
+  setIsDagger(state,flag){
+    state.isDagger = flag
+  },
+  updateCurCanvasElement(state,eleData){
+    let updateIndex
+    const copyElement = cloneDeep(eleData)
+    const { x, y, props } = copyElement || {}
+    const { width, height, rotate, fontSize, radius } = props || {}
+
+    copyElement.x = x / state.canvasScaleRatio
+    copyElement.y = y / state.canvasScaleRatio
+
+    if (copyElement.props) {
+      copyElement.props.width = width / state.canvasScaleRatio
+      copyElement.props.height = height / state.canvasScaleRatio
+      copyElement.props.rotate = rotate
+      copyElement.props.radius = radius / state.canvasScaleRatio
+    }
+
+    if (copyElement.props && copyElement.type === 'text') {
+      copyElement.props.fontSize = fontSize / state.canvasScaleRatio
+    }
+
+    const { id } = copyElement || {}
+    const { element } = state.curCanvas || {}
+
+    for (let index = 0; index < element.length; index++) {
+      if (id === element[index].id) {
+        updateIndex = index
+        break
+      }
+    }
+    if (typeof updateIndex === 'number') {
+      state.curCanvas.element[updateIndex] = copyElement
+    } else {
+      state.curCanvas.element.push(copyElement)
+    }
+  
+  },
+  draggerEle(state,eleData){
+    let updateIndex
+    const copyElement = cloneDeep(eleData)
+    const { element } = state.curCanvas || {}
+    const { id, x, y } = copyElement || {}
+    copyElement.x = x / state.canvasScaleRatio
+    copyElement.y = y / state.canvasScaleRatio
+    updateIndex = element.findIndex(item=>Number(item.id)===Number(id))
+    if(updateIndex===-1){
+
+    }else{
+      const ele = cloneDeep(state.curCanvas.element[updateIndex])
+      ele.x = Number(copyElement.x)
+      ele.y = Number(copyElement.y)
+      state.curCanvas.element[updateIndex] = ele
+    }
+
   }
 }
 
-const actions = {}
+const actions = {
+  setSelectId({state,commit},id){
+      commit('setSelectId',id)
+      commit('setSelectGroupId',id)
+  }
+}
 
 export default {
   namespaced: true,
