@@ -10,8 +10,13 @@
         <div>my: {{pointerInfo.mY}}</div>
       </div> -->
       <div class="position_xy">
+        cx-cy
         <div>x: {{pointerInfo.cx}}</div>
         <div>y: {{pointerInfo.cy}}</div>
+
+                x-y
+        <div>x: {{pointerInfo.x}}</div>
+        <div>y: {{pointerInfo.y}}</div>
       </div>
   </div>
 </template>

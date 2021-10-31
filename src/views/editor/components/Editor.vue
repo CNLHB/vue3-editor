@@ -6,29 +6,34 @@
 
     <ScaleBar />
 
-    <!-- <ContextMenu /> -->
+    <ContextMenu />
 
   </div>
 </template>
 
 <script>
 import { onMounted, reactive,toRefs,toRef } from 'vue';
+import { useEditorContextMenu } from '../hooks';
 import useEditorEvent from '../hooks/use-editor-event';
 import Canvas from './Canvas.vue';
 import ScaleBar from './ScaleBar.vue';
+import ContextMenu from './ContextMenu.vue';
 export default {
     components:{
         Canvas,
-        ScaleBar
+        ScaleBar,
+        ContextMenu
     },
     setup(props){
       const state = reactive({
         editorRef:null
       })
       const { bindEditEvents} = useEditorEvent(toRef(state, 'editorRef'))
+      const { bindEditContextMenu} = useEditorContextMenu(toRef(state, 'editorRef'))
 
       onMounted(()=>{
         bindEditEvents()
+        bindEditContextMenu()
       })
         function clickhandle(event){
           console.log(event);

@@ -24,8 +24,9 @@
             <!-- <div v-if="isEleHoverLayerLock" class="editor_ele_select_lock_text">图层已锁定</div> -->
           </div>
           <!--  :style="selectStyle" -->
-          <div class="editor_ele_select" :class="{select_box:!selectId}">
-            <div
+          <div class="editor_ele_select" :class="{select_box:!selectId}"  >
+            <!-- <div class="editor_ele_select" :style="selectStyle"></div> -->
+            <i
               class="dagger_pointer"
               :data-id="'dot_' + index"
               v-for="(pointer, index) in daggerPointer"
@@ -34,7 +35,7 @@
               :style="{ left: pointer.x - 6 + 'px', top: pointer.y - 6 + 'px',cursor: pointer.cursor }"
               @mousedown="handleClick(index, $event)"
               @mousemove="handleMouseMove"
-            ></div>
+            ></i>
           </div>
         </div>
       </div>
@@ -201,11 +202,22 @@ export default {
     bottom: 0;
     top: 0;
     pointer-events: none;
-    z-index: 10;
+    z-index: 1000;
+    user-select: none;
     box-sizing: border-box;
   }
 
   .editor_ele_select {
+    &::before{
+      content: '';
+      // border: 3px solid @hoverColor;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+    }
     .editor_ele_hover;
     &.select_box{
       border: 1px solid @hoverColor;
@@ -223,6 +235,7 @@ export default {
     box-sizing: border-box;
     pointer-events: initial;
     cursor: pointer;
+    transform:rotate(30deg);
   }
 }
 

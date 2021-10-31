@@ -44,11 +44,12 @@ export default {
     setup(props,{emit}){
         const store = useStore()
         const selectId =  computed(()=>store.state.editor.selectId)
+        const isDagger =  computed(()=>store.state.editor.isDagger)
         const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
         const isHover =  computed(()=>{
-                    if(hoverEleList.value.length===0)return ''
-        const {id} = hoverEleList.value[hoverEleList.value.length-1]
-        return id
+            if(hoverEleList.value.length===0)return ''
+            const {id} = hoverEleList.value[hoverEleList.value.length-1]
+            return !isDagger&&id
         })
 
         const state = reactive({
@@ -76,7 +77,6 @@ export default {
   position: absolute;
   box-sizing: border-box;
   user-select: none;
-  opacity: 1!important;
 }
 
 .ele_type_img {

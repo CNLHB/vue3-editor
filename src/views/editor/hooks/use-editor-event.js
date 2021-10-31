@@ -26,6 +26,7 @@ export default function useEditorEvent (ele, {
     })
   function bindEditEvents () {
     ele.value.addEventListener('mousedown', handleMouseDown)
+    ele.value.addEventListener('contextmenu', handleContextMenu)
     body.addEventListener('mousemove', handleMouseMove)
     body.addEventListener('mouseup', handleMouseUp)
   }
@@ -36,6 +37,9 @@ export default function useEditorEvent (ele, {
     body.removeEventListener('mouseup', handleMouseUp)
   }
   function handleMouseDown (event) {
+    if(event.button===2){
+      return 
+    }
     console.log('editor');
     let target = event.target
     state.target = target
@@ -66,33 +70,39 @@ export default function useEditorEvent (ele, {
       state.moveY = event.pageY- state.startY
     }
     if(!isParentEle(target,'id','editorWrapper'))return 
+    // console.log(target);
     let pointerInfo = createPointerInfo(event)
     const dataId = target.getAttribute('data-id')
     //||isDagger
     if(ignoreEle.some(item=>item===dataId||(dataId&&dataId.startsWith(item)))){
-        delete pointerInfo.x
-        delete pointerInfo.y
+        // delete pointerInfo.x
+        // delete pointerInfo.y
         
     }
     if(isDagger.value){
-        delete pointerInfo.x
-        delete pointerInfo.y
+        // delete pointerInfo.x
+        // delete pointerInfo.y
         
     }
     store.commit(COMMITS.SET_POINTER_INFO, {movePst:{x:state.moveX ,y:state.moveY},...pointerInfo})
     if(selectId.value&&state.target){
       store.commit(COMMITS.SET_IS_DAGGER,true)
       store.commit(COMMITS.DAGGER_ELE, {id:selectId.value,x:state.moveX + state.selectInfo.x ,y:state.moveY+ state.selectInfo.y})
+      // console.log(hoverEleList.value);
+
     }
   }
 
   function handleMouseUp (event) {
     state.target = null
     state.selectInfo = {x:0,y:0}
+    console.log('up');
     store.commit(COMMITS.SET_IS_DAGGER,false)
 
   }
-
+  function handleContextMenu(event){
+    event.preventDefault();
+  }
   return {
     ...toRefs(state),
     unbindEditEvents,
