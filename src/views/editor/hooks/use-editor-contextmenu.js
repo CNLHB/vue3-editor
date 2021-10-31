@@ -13,9 +13,10 @@ export default function useEditorContextMenu (ele, {
    const isDagger =  computed(()=>store.state.editor.isDagger)
    const selectId =  computed(()=>store.state.editor.selectId)
    const selectInfo =  computed(()=>store.getters[GETTERS.SELECT_INFO])
+   const pointerInfo =  computed(()=>store.state.editor.pointerInfo)
    
   const state = reactive({
-       isContextMenuOpen:true,
+       isContextMenuOpen:false,
        menuPst:{x:0,y:0},
        target:null,
 
@@ -60,6 +61,7 @@ export default function useEditorContextMenu (ele, {
   }
   function handleContextMenu(event){
     event.preventDefault();
+    state.isContextMenuOpen = true
   }
   return {
     ...toRefs(state),

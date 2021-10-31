@@ -1,12 +1,13 @@
 <!--  -->
 <template>
-  <div ref="menuRef" class="menu_wrap">
+  <div ref="menuRef" v-if="isContextMenuOpen" class="menu_wrap" :style="renderMenuStyle">
+      <!-- :style="{left:pointerInfo.mx+'px',top:pointerInfo.my+'px'}"  -->
       1111222
   </div>
 </template>
 
 <script>
-import { reactive, toRefs ,computed} from 'vue'
+import { reactive, toRefs ,toRef,computed, watch} from 'vue'
 import { useStore } from 'vuex'
 import { GETTERS } from '@commits/editor'
 import { useEditorContextMenu } from '../hooks'
@@ -15,12 +16,28 @@ export default {
 
     setup(props){
       const store = useStore()
-     const { isContextMenuOpen, menuPst, onSelectMenu } = useEditorContextMenu(toRef(state, 'menuRef'))
-      const state = reactive({
-
+            const state = reactive({
+                menuRef:null
       })
+     const { isContextMenuOpen, menuPst, onSelectMenu } = useEditorContextMenu(toRef(state, 'menuRef'))
+        const pointerInfo =  computed(()=>store.state.editor.pointerInfo);
+        // watch(()=>pointerInfo.value,(current,parent)=>{
+        //     // console.log(current);
+        // },{deep:true})
+
+        const renderMenuStyle = computed(()=>{
+            return {
+                left: pointerInfo.value.x + 'px',
+                top: pointerInfo.value.y + 'px',
+                zIndex:111
+
+            }
+        })
       return {
         ...toRefs(state),
+        isContextMenuOpen,
+        renderMenuStyle,
+        pointerInfo
       }
     }
 }
@@ -29,6 +46,8 @@ export default {
 <style lang='less' scoped>
 .menu_wrap{
     position: absolute;
-    background-color: #fff;
+    top:0;
+    left: 0;
+    background-color: red;
 }
 </style>
