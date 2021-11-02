@@ -1,4 +1,4 @@
-import { reactive, toRefs,computed } from 'vue'
+import { reactive, toRefs,computed,onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { ignoreEle } from '../../../config'
 import { ACTIONS, COMMITS,GETTERS} from '../../../store/const/editor'
@@ -19,16 +19,21 @@ export default function useEditorContextMenu (ele, {
        isContextMenuOpen:false,
        menuPst:{x:0,y:0},
        target:null,
+       wrapperRef:null
 
     })
-  function bindEditContextMenu () {
-    // ele.value.addEventListener('mousedown', handleMouseDown)
-    ele.value.addEventListener('contextmenu', handleContextMenu)
-  }
+    function bindEvent () {
+      // ele.value.addEventListener('mousedown', handleMouseDown)
+      state.wrapperRef.addEventListener('contextmenu', handleContextMenu)
+    }
+    onMounted(() => {
+        state.wrapperRef = document.querySelector('#editorWrapper')
+        bindEvent()
+    }),
+
 
   function unBindEditContextMenu () {
-    ele.value.removeEventListener('mousedown', handleMouseDown)
-    ele.value.removeEventListener('mousemove', handleMouseMove)
+    ele.value.removeEventListener('contextmenu', handleContextMenu)
   }
   function handleMouseDown (event) {
 
@@ -62,11 +67,12 @@ export default function useEditorContextMenu (ele, {
   function handleContextMenu(event){
     event.preventDefault();
     state.isContextMenuOpen = true
+    state.menuPst.x = event.pageX
+    state.menuPst.y = event.pageY
+    console.log('menu');
   }
   return {
     ...toRefs(state),
     onSelectMenu,
-    bindEditContextMenu,
-    unBindEditContextMenu
   }
 }

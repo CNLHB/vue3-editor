@@ -96,7 +96,7 @@ export default function useEditorEvent (ele, {
   function handleMouseUp (event) {
     state.target = null
     state.selectInfo = {x:0,y:0}
-    console.log('up');
+    // console.log('up');
     store.commit(COMMITS.SET_IS_DAGGER,false)
 
   }

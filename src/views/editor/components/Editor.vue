@@ -13,7 +13,6 @@
 
 <script>
 import { onMounted, reactive,toRefs,toRef } from 'vue';
-import { useEditorContextMenu } from '../hooks';
 import useEditorEvent from '../hooks/use-editor-event';
 import Canvas from './Canvas.vue';
 import ScaleBar from './ScaleBar.vue';
@@ -29,11 +28,9 @@ export default {
         editorRef:null
       })
       const { bindEditEvents} = useEditorEvent(toRef(state, 'editorRef'))
-      const { bindEditContextMenu} = useEditorContextMenu(toRef(state, 'editorRef'))
 
       onMounted(()=>{
         bindEditEvents()
-        bindEditContextMenu()
       })
         function clickhandle(event){
           console.log(event);
