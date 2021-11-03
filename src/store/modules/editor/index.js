@@ -18,31 +18,34 @@ const state = () => {
     },
     title: '',
     curCanvas: {
-      width: 1500, // 画板宽
-      height: 1500, // 画板高
-      bgImage: '', // 画板背景图
-      bgColor: {
-        type: 'linear',
-        style: 'background-image: linear-gradient(90deg, rgba(0, 245, 255, 1) 0%,rgba(31, 0, 255, 1) 100%);',
-        color: {
-          hex: '#ffffff',
-          rgba: { r: 0, g: 0, b: 0, a: 1 },
-          color: 'rgba(255, 255, 255, 1)'
-        },
-        deg: 90,
-        colors: [
-          {
-            color: 'rgba(255, 255, 255, 1)',
+      title: '',
+      palette:{
+        width: 1500, // 画板宽
+        height: 1500, // 画板高
+        bgImage: '', // 画板背景图
+        bgColor: {
+          type: 'linear',
+          style: 'background-image: linear-gradient(90deg, rgba(0, 245, 255, 1) 0%,rgba(31, 0, 255, 1) 100%);',
+          color: {
             hex: '#ffffff',
-            pst: 100
+            rgba: { r: 0, g: 0, b: 0, a: 1 },
+            color: 'rgba(255, 255, 255, 1)'
           },
-          {
-            color: 'rgba(0, 0, 0, 1)',
-            hex: '#000000',
-            pst: 0
-          }
-        ]
-      }, // 画板背景色
+          deg: 90,
+          colors: [
+            {
+              color: 'rgba(255, 255, 255, 1)',
+              hex: '#ffffff',
+              pst: 100
+            },
+            {
+              color: 'rgba(0, 0, 0, 1)',
+              hex: '#000000',
+              pst: 0
+            }
+          ]
+        }, // 画板背景色
+      },
       element: defaultImgData?defaultImgData:[],
     },
     canvasScaleRatio: 1,
@@ -54,7 +57,37 @@ const state = () => {
   }
 }
 
+function getRatioElements (element, ratio) {
+  return cloneDeep(element).map(item => {
+    const { x, y, props, type } = item || {}
+    const { width, height, fontSize, radius } = props || {}
+
+    item.x = x * ratio
+    item.y = y * ratio
+
+    if (item.props) {
+      item.props.width = width * ratio
+      item.props.height = height * ratio
+      item.props.radius = radius * ratio
+    }
+
+    if (type === 'text') {
+      item.props.fontSize = fontSize * ratio
+    }
+
+    return item
+  })
+}
 const getters = {
+  currentElementInfoMap (state, getters) {
+    const infoMap = {}
+    getters.viewCanvas.element &&
+      getters.viewCanvas.element.forEach(item => {
+        infoMap[item.id] = item
+      })
+    return infoMap
+  },
+  // 预览图数据
   preViewCanvas (state) {
     const copyCurCanvas = cloneDeep(state.curCanvas)
     const { element } = copyCurCanvas || {}
@@ -70,6 +103,7 @@ const getters = {
 
     return copyCurCanvas
   },
+  // 视图渲染数据
   viewCanvas (state) {
     const copyCurCanvas = cloneDeep(state.curCanvas)
     const { element } = copyCurCanvas || {}
@@ -79,23 +113,28 @@ const getters = {
     }
 
     const ratio = state.canvasScaleRatio
-    // const copyElement = getRatioElements(element, ratio)
+    const copyElement = getRatioElements(element, ratio)
 
-    // copyCurCanvas.element = copyElement
+    copyCurCanvas.element = copyElement
 
     return copyCurCanvas
   },
-  hoverEleList(state){
-    const copyCurCanvas = cloneDeep(state.curCanvas)
+  // 画布真实宽高
+  canvasRealSize (state) {
+    const { palette } = state.curCanvas
+    const { width, height } = palette || {}
+    return {
+      width,
+      height
+    }
+  },
+  hoverEleList(state,getters){
+    const copyCurCanvas = cloneDeep(getters.viewCanvas)
     const {x,y} = cloneDeep(state.pointerInfo)
     const { element } = copyCurCanvas || {}
     let container = element.filter(item=>{
         let l = item.x + item.props.width
         let t = item.y + item.props.height
-        // console.log(x);
-        // console.log(y);
-        // console.log(t);
-        // console.log(t);
         if(x>=item.x&&x<=l&&y>item.y&&y<=t){
           return true
         }
@@ -103,13 +142,16 @@ const getters = {
     })
     return container
   },
-  selectInfo(state){
+  selectInfo(state,getters){
+    // console.log();
+    const currentElementInfoMap = getters.currentElementInfoMap
+    return currentElementInfoMap[state.selectId]
     const copyCurCanvas = cloneDeep(state.curCanvas)
     const { element } = copyCurCanvas || {}
     return element.find(item=>String(item.id)===String(state.selectId))
   },
-  getDaggerPointers(state){
-    const copyCurCanvas = cloneDeep(state.curCanvas)
+  getDaggerPointers(state,getters){
+    const copyCurCanvas = cloneDeep(getters.viewCanvas)
     const { element } = copyCurCanvas || {}
     return createPointer(element.find(item=>String(item.id)===String(state.selectId)))
   },
@@ -119,6 +161,9 @@ const getters = {
 const mutations = {
   setDocTitle(state, title) {
     state.title = title
+  },
+  setCanvasScaleRatio(state,scale){
+    state.canvasScaleRatio = scale
   },
   setMaterialPanelWidth (state, width) {
     console.log(width);
@@ -185,6 +230,7 @@ const mutations = {
     const { id, x, y } = copyElement || {}
     copyElement.x = x / state.canvasScaleRatio
     copyElement.y = y / state.canvasScaleRatio
+    // return
     updateIndex = element.findIndex(item=>String(item.id)===String(id))
     if(updateIndex===-1){
 

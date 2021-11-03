@@ -11,6 +11,7 @@ export default function useEditorEvent (ele, {
    const store =  useStore()
    const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
    const isDagger =  computed(()=>store.state.editor.isDagger)
+   const canvasScaleRatio =  computed(()=>store.state.editor.canvasScaleRatio)
    const selectId =  computed(()=>store.state.editor.selectId)
    const selectInfo =  computed(()=>store.getters[GETTERS.SELECT_INFO])
    const body = document.body
@@ -87,7 +88,7 @@ export default function useEditorEvent (ele, {
     store.commit(COMMITS.SET_POINTER_INFO, {movePst:{x:state.moveX ,y:state.moveY},...pointerInfo})
     if(selectId.value&&state.target){
       store.commit(COMMITS.SET_IS_DAGGER,true)
-      store.commit(COMMITS.DAGGER_ELE, {id:selectId.value,x:state.moveX + state.selectInfo.x ,y:state.moveY+ state.selectInfo.y})
+      store.commit(COMMITS.DAGGER_ELE, {id:selectId.value,x:state.moveX + state.selectInfo.x  ,y:state.moveY+ state.selectInfo.y})
       // console.log(hoverEleList.value);
 
     }

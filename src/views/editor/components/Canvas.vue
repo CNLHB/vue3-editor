@@ -4,7 +4,7 @@
     <div class="editor_wrap_box gb_scroll layout_center">
       <div class="editor_cnt_box">
         <div class="editor_cnt_bg">
-          <CanvasGrid></CanvasGrid>
+          <!-- <CanvasGrid></CanvasGrid> -->
         </div>
         <div
           class="editor_ele_box"
@@ -100,12 +100,15 @@ export default {
 
       return viewCanvas.value;
     });
+    const editorStyle = computed(() => {
+      return  {
+        width: canvasData.value.palette.width*canvasScaleRatio.value + "px",
+        height: canvasData.value.palette.height*canvasScaleRatio.value + "px",
+      }
+    });
     const state = reactive({
       editorRef: null,
-      editorStyle: {
-        width: canvasData.value.width + "px",
-        height: canvasData.value.height + "px",
-      },
+      editorStyle
     });
 
     const { bindEditEvents } = useEleEvent(toRef(state, "editorRef"));

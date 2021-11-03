@@ -49,7 +49,7 @@ export default {
         const isHover =  computed(()=>{
             if(hoverEleList.value.length===0)return ''
             const {id} = hoverEleList.value[hoverEleList.value.length-1]
-            return !isDagger&&id
+            return !isDagger.value&&id
         })
 
         const state = reactive({
@@ -77,6 +77,11 @@ export default {
   position: absolute;
   box-sizing: border-box;
   user-select: none;
+  &::before{
+       height: 100%;
+      width: 100%;
+          box-sizing: border-box;
+  }
 }
 
 .ele_type_img {
@@ -84,6 +89,11 @@ export default {
     width: 100%;
     height: 100%;
   }
+
+}
+.ele_type_text {
+  overflow: visible;
+}
   .editor_ele_text_box {
   padding: 3px 10px;
   word-break: break-all;
@@ -99,17 +109,28 @@ export default {
     white-space: pre-wrap;
   }
 }
-}
-.ele_type_text {
-  overflow: visible;
-}
-
 .ele_selected {
-   box-sizing: border-box;
-   border: 1px solid @hoverColor;
+  //  box-sizing: border-box;
+  //  border: 1px solid @hoverColor;
    cursor: move;
+   height: 100%;
+    width: 100%;
+   &::before{
+     display: block;
+     content: '';
+     position: absolute;
+     border: 1px solid @hoverColor;
+   }
 }
 .ele_hovered {
-   border: 1px solid @hoverColor;
+  //  border: 1px solid @hoverColor;
+  //  box-sizing: border-box;
+
+      &::before{
+     display: block;
+     content: '';
+     position: absolute;
+     border: 1px solid @hoverColor;
+   }
 }
 </style>
