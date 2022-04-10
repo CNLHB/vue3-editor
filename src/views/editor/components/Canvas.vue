@@ -47,6 +47,7 @@
 </template>
 
 <script>
+
 import { onMounted, computed, reactive, toRefs, toRef } from "vue";
 import { GETTERS } from "@commits/editor";
 import useEleEvent from "../hooks/usr-ele-event";
@@ -110,13 +111,11 @@ export default {
       };
     });
     const daggerEleListStyle = computed(() => { 
-          const lefts = []
-    const tops = []
-    const rights = []
-    const bottoms = []
-    const PADDING = 30
     const list = daggerEleList.value.length > 0 ? daggerEleList.value:selectGroupInfo.value
-            let left = 99999
+    if(list.length<=1){
+      return {};
+    }
+    let left = 99999
         let top = 99999
         let BHeight = -99999
         let BWidth = -99999
@@ -187,6 +186,7 @@ export default {
 };
 </script>
 <style lang='less' scoped>
+
 .editor_wrap {
   width: 100%;
   height: 100%;

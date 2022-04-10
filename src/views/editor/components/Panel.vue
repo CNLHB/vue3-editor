@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import { reactive, toRefs ,computed} from 'vue'
+import { reactive, toRefs ,computed, watch} from 'vue'
 import { useStore } from 'vuex'
-import { GETTERS } from '@commits/editor'
+import { GETTERS,ACTIONS } from '@commits/editor'
 
 export default {
 
@@ -32,7 +32,26 @@ export default {
       const store = useStore()
       const pointerInfo =  computed(()=>store.state.editor.pointerInfo)
       const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
+      const selectInfo = computed(() => store.getters[GETTERS.SELECT_INFO]);
+      const selectId = computed(() => store.state.editor.selectId);
 
+      watch(()=>selectId.value,()=>{
+        watchHeight()
+      })
+      function watchHeight () {
+        if(!selectInfo.value||selectInfo.value.type!=='text')return
+        const oDiv = document.querySelector(`div[data-id=${selectInfo.value.id}]`)
+        try {
+          const height = oDiv.querySelector('.editor_ele_text_box').clientHeight
+          const heightData = { height }
+          store.dispatch(ACTIONS.TO_UPDATE_ELE_PROPS, {
+          ...heightData
+      })
+          console.log(heightData);
+        } catch (e) {
+          console.log(e);
+        }
+      }
       const state = reactive({
 
       })

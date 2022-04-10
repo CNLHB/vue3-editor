@@ -36,7 +36,6 @@ export default function useEditorContextMenu(ele, {
       ele.value.removeEventListener('contextmenu', handleContextMenu)
     }
   function handleMouseDown(event) {
-    console.log(88);
     if(state.isContextMenuOpen){
       state.isContextMenuOpen = false
       store.commit(COMMITS.DISABLED_DAGGER, false)

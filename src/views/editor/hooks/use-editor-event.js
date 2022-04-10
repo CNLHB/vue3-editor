@@ -10,6 +10,7 @@ export default function useEditorEvent(ele, {
 } = {}) {
   const store = useStore()
   const hoverEleList = computed(() => store.getters[GETTERS.HOVER_ELE_LIST])
+  const selectGroupInfo = computed(() => store.getters[GETTERS.SELECT_GROUP_INFO])
   const isDagger = computed(() => store.state.editor.isDagger)
   const canvasScaleRatio = computed(() => store.state.editor.canvasScaleRatio)
   const selectId = computed(() => store.state.editor.selectId)
@@ -64,14 +65,15 @@ export default function useEditorEvent(ele, {
       if(metaKey){
         if(selectIds.value.length===0&&selectId.value){
           store.dispatch(ACTIONS.SET_GROUP_SELECT_IDS, selectId.value)
-
         }
         store.dispatch(ACTIONS.SET_GROUP_SELECT_IDS, id)
       }else{
-        store.commit(COMMITS.SET_SELECT_ID,id)
+        if(!selectIds.value.includes(id)){
+          store.dispatch(ACTIONS.SET_GROUP_SELECT_IDS, '')
+        }
+        store.commit(COMMITS.SET_SELECT_ID, id)
       }
       console.log('select id ======', id);
-      console.log('select selectId ======', selectId.value);
       console.log('select selectIds ======', selectIds.value);
       
 
@@ -84,7 +86,6 @@ export default function useEditorEvent(ele, {
       state.selectInfoMap[selectInfo.value.id].x = selectInfo.value.x
       state.selectInfoMap[selectInfo.value.id].y = selectInfo.value.y
     }
-
   }
   function handleMouseMove(event) {
     let target = event.target
@@ -109,7 +110,6 @@ export default function useEditorEvent(ele, {
     if (selectId.value && state.target) {
       store.commit(COMMITS.SET_IS_DAGGER, true)
       store.dispatch(ACTIONS.DAGGER_ELE_LIST, { ids: selectIds.value.length!==0?selectIds.value:[selectId.value], x: state.moveX, y: state.moveY,infoMap:cloneDeep(state.selectInfoMap) })
-      // console.log(hoverEleList.value);
     }
   }
 
@@ -119,7 +119,21 @@ export default function useEditorEvent(ele, {
     // console.log('up');
     store.commit(COMMITS.SET_IS_DAGGER, false)
     store.commit(COMMITS.UPDATE_DAGGER_LIST)
-
+    if(selectIds.value.length!==0) {
+      selectGroupInfo.value.forEach(eleInfo=>{
+        state.selectInfoMap[ eleInfo.id] = {
+          x: eleInfo.x,
+          y: eleInfo.y
+        }
+      })
+    }else{
+      state.selectInfoMap = {}
+    }
+    if(selectInfo.value){
+      state.selectInfoMap[selectInfo.value.id] = {}
+      state.selectInfoMap[selectInfo.value.id].x = selectInfo.value.x
+      state.selectInfoMap[selectInfo.value.id].y = selectInfo.value.y
+    }
   }
   function handleContextMenu(event) {
     event.preventDefault();

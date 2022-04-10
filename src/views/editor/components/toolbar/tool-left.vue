@@ -42,7 +42,31 @@ export default {
     })
     // tracks mouse position
     const { x, y } = useMouse({})
+    function handleUndo () {
+      if (isEditEleText.value) return
+      const showCanvas = cloneDeep(historyUndoData.value[historyUndoLength.value - 1])
+      const pushData = cloneDeep(curCanvas.value)
+      store.commit(COMMITS.UPDATE_CUR_CANVAS, showCanvas)
 
+      nextTick(() => {
+        store.commit(COMMITS.PUSH_HISTORY_REDO, cloneDeep(pushData))
+      })
+    }
+
+    function handleRedo () {
+      if (isEditEleText.value) return
+      const showCanvas = cloneDeep(historyRedoData.value[historyRedoLength.value - 1])
+      const pushData = cloneDeep(curCanvas.value)
+      store.commit(COMMITS.UPDATE_CUR_CANVAS, showCanvas)
+
+      nextTick(() => {
+        const isClearRedo = false
+        store.commit(COMMITS.PUSH_HISTORY_UNDO, {
+          data: pushData,
+          isClearRedo
+        })
+      })
+    }
     return { x, y }
     return {
       ...toRefs(state),

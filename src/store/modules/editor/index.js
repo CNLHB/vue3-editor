@@ -66,7 +66,9 @@ const state = () => {
     selectIds: [],
     daggerEleList: [],
     isDagger: false,
-    disabledDagger: false
+    disabledDagger: false,
+    historyUndoData: [],
+    historyRedoData: [],
 
   }
 }
@@ -231,7 +233,9 @@ const mutations = {
   },
   setSelectId(state, selectId) {
     state.selectId = selectId
-
+    if(!selectId){
+      state.selectIds = []
+    }
     // if(state.selectIds.length===0){
     //   state.selectId = selectId
     //   return 
@@ -245,6 +249,7 @@ const mutations = {
       const index = state.selectIds.indexOf(selectId)
       if(index!==-1) {
         state.selectIds.splice(index, 1)
+        state.selectId = state.selectIds[0]||''
         return 
       }
       state.selectIds.push(selectId)
@@ -352,7 +357,23 @@ const mutations = {
     })
 
 
-  }
+  },
+  pushHistoryUndo (state, { data, isClearRedo = true }) {
+    state.historyUndoData.push(data)
+    if (isClearRedo) {
+      state.historyRedoData = []
+    } else {
+      state.historyRedoData.pop()
+    }
+  },
+  pushHistoryRedo (state, data) {
+    state.historyRedoData.push(data)
+    state.historyUndoData.pop()
+  },
+  clearHistory (state) {
+    state.historyUndoData = []
+    state.historyRedoData = []
+  },
 }
 
 const actions = {
@@ -391,8 +412,10 @@ const actions = {
       let ele = element.find(item => String(item.id) === String(id))
       if (ele) {
         const newEle = cloneDeep(ele)
-        newEle.x = Number(x) + Number(infoMap[id].x)
-        newEle.y = Number(y) + Number(infoMap[id].y)
+        if(infoMap[id]){
+          newEle.x = Number(x) + Number(infoMap[id].x)
+          newEle.y = Number(y) + Number(infoMap[id].y)
+        }
         newEle.x = newEle.x / state.canvasScaleRatio
         newEle.y = newEle.y / state.canvasScaleRatio
         state.daggerEleList.push(newEle)
@@ -400,6 +423,24 @@ const actions = {
     })
     commit('draggerEle', updateEle)
 
+  },
+  updateEleProps ({ commit, getters }, props) {
+    return new Promise((resolve, reject) => {
+      let copyData = cloneDeep(getters.selectInfo)
+
+      // 有些属性改变是异步的，但是又不完全是已选元素，比如加载的时候，切换了元素
+      if (props?._eleId) {
+        copyData = cloneDeep(getters.currentElementInfoMap[props?._eleId])
+      }
+
+      copyData.props = {
+        ...copyData.props,
+        ...props
+      }
+
+      commit('updateCurCanvasElement', copyData)
+      resolve()
+    })
   },
 }
 
