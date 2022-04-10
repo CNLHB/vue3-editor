@@ -24,6 +24,7 @@
             <!-- <div v-if="isEleHoverLayerLock" class="editor_ele_select_lock_text">图层已锁定</div> -->
           </div>
           <!--  :style="selectStyle" -->
+          <div class="editor_ele_select_group" :style="daggerEleListStyle"></div>
           <div class="editor_ele_select" :class="{select_box:!selectId}"  >
             <!-- <div class="editor_ele_select" :style="selectStyle"></div> -->
             <i
@@ -51,9 +52,8 @@ import { GETTERS } from "@commits/editor";
 import useEleEvent from "../hooks/usr-ele-event";
 import EleItem from "./EleItem.vue";
 import CanvasGrid from "./canvas-grid/index.vue";
-
 import { useStore } from "vuex";
-
+import { createRect} from '../../../utils/domUtils'
 export default {
   components: {
     EleItem,
@@ -62,16 +62,33 @@ export default {
   setup(props) {
     const store = useStore();
 
+
     const canvasScaleRatio = computed(
       () => store.state.editor.canvasScaleRatio
     );
+    const daggerEleList =  computed(()=>store.getters[GETTERS.DAGGER_ELE_LIST_RADIO])
+    const selectGroupInfo =  computed(()=>store.getters[GETTERS.SELECT_GROUP_INFO])
     const hoverEleList = computed(() => store.getters[GETTERS.HOVER_ELE_LIST]);
     const selectId = computed(() => store.state.editor.selectId);
+    const selectIds = computed(() => store.state.editor.selectIds);
     const selectInfo = computed(() => store.getters[GETTERS.SELECT_INFO]);
     const viewCanvas = computed(() => store.getters[GETTERS.VIEW_CANVAS]);
     const daggerPointer = computed(
       () => store.getters[GETTERS.GET_DAGGER_POINTERS]
     );
+        const editorStyle = computed(() => {
+      return  {
+        width: canvasData.value.palette.width*canvasScaleRatio.value + "px",
+        height: canvasData.value.palette.height*canvasScaleRatio.value + "px",
+      }
+    });
+    const state = reactive({
+      editorRef: null,
+      editorStyle,
+    });
+
+
+    // TODO: 鼠标移入样式未完成
     const hoverStyle = computed(() => {
       if (hoverEleList.value.length === 0) return { display: "none" };
       const { x, y, props } = hoverEleList.value[hoverEleList.value.length - 1];
@@ -92,6 +109,43 @@ export default {
         height: props.height + "px",
       };
     });
+    const daggerEleListStyle = computed(() => { 
+          const lefts = []
+    const tops = []
+    const rights = []
+    const bottoms = []
+    const PADDING = 30
+    const list = daggerEleList.value.length > 0 ? daggerEleList.value:selectGroupInfo.value
+            let left = 99999
+        let top = 99999
+        let BHeight = -99999
+        let BWidth = -99999
+        list.forEach((item) => {
+          const rect = createRect(item)
+          if (top > rect.top) {
+            top = rect.top
+          }
+          if (left > rect.left) {
+            left = rect.left
+          }
+          if ((rect.left + rect.BWidth) > BWidth) {
+            BWidth = rect.left + rect.BWidth
+          }
+          if ((rect.top + rect.BHeight) > BHeight) {
+            BHeight = rect.top + rect.BHeight
+          }
+        })
+        BHeight = BHeight - top
+        BWidth = BWidth - left
+      const rectData = { left, top, BWidth, BHeight }
+    return {
+      left: rectData.left + "px",
+      top: rectData.top+ "px",
+      width: rectData.BWidth+ "px",
+      height: rectData.BHeight+ "px",
+
+    } 
+    })
     // const preViewCanvas = computed(() => store.getters[GETTERS.PREVIEW_CANVAS])
     const canvasData = computed(() => {
       //   if (type.value === 'view') {
@@ -100,16 +154,7 @@ export default {
 
       return viewCanvas.value;
     });
-    const editorStyle = computed(() => {
-      return  {
-        width: canvasData.value.palette.width*canvasScaleRatio.value + "px",
-        height: canvasData.value.palette.height*canvasScaleRatio.value + "px",
-      }
-    });
-    const state = reactive({
-      editorRef: null,
-      editorStyle
-    });
+
 
     const { bindEditEvents } = useEleEvent(toRef(state, "editorRef"));
     onMounted(() => {
@@ -135,7 +180,8 @@ export default {
       hoverStyle,
       selectStyle,
       daggerPointer,
-      selectId
+      selectId,
+      daggerEleListStyle
     };
   },
 };
@@ -209,7 +255,15 @@ export default {
     user-select: none;
     box-sizing: border-box;
   }
-
+  .editor_ele_select_group{
+      position: absolute;
+      // left: 0;
+      // top: 0;
+      // bottom: 0;
+      // right: 0;
+      pointer-events: none;
+      border: 1px dashed @hoverColor;
+  }
   .editor_ele_select {
     &::before{
       content: '';

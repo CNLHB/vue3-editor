@@ -9,9 +9,8 @@
       'ele_hovered': item.id === isHover,
     }"
     draggable="false"
-
     ref="eleBoxRef"
-    :style="renderEleStyle(item)"
+    :style="daggerItem?renderEleStyle(daggerItem):renderEleStyle(item)"
     >
         <div class="ele_content">
             <img v-if="item.props && item.type === 'img'" :src="item.src" draggable="false" alt="">
@@ -45,6 +44,9 @@ export default {
         const store = useStore()
         const selectId =  computed(()=>store.state.editor.selectId)
         const isDagger =  computed(()=>store.state.editor.isDagger)
+        const daggerEleList =  computed(()=>store.getters[GETTERS.DAGGER_ELE_LIST_RADIO])
+        // .getters[GETTERS.HOVER_ELE_LIST]
+        const daggerItem = computed(()=>daggerEleList.value.find(ele=>ele.id===props.item.id))
         const hoverEleList =  computed(()=>store.getters[GETTERS.HOVER_ELE_LIST])
         const isHover =  computed(()=>{
             if(hoverEleList.value.length===0)return ''
@@ -62,6 +64,7 @@ export default {
             renderEleStyle,
             renderTextStyle,
             selectId,
+            daggerItem,
             isHover
         }
 

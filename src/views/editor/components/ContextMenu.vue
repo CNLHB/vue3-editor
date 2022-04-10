@@ -1,7 +1,7 @@
 <!--  -->
 <template>
-  <div ref="menuRef" v-if="isContextMenuOpen" class="menu_wrap menu" :style="renderMenuStyle">
-      <el-menu mode="horizontal"  @select="handleSelect">
+  <div  @mousedown="handleClick" ref="menuRef" v-if="isContextMenuOpen" class="menu_wrap menu" :style="renderMenuStyle">
+      <el-menu mode="horizontal" @select="handleSelect">
      <!-- <el-menu-item index="1">Processing Center</el-menu-item> -->
     <!-- <el-sub-menu index="2">
       <template #title>Workspace</template>
@@ -18,7 +18,13 @@
     <el-menu-item index="3" disabled>Info</el-menu-item>
     <el-menu-item index="4">Orders</el-menu-item> -->
       <el-menu-item-group index="1">
-        <el-menu-item index="copy" :disabled="isCopyDisabled"><span>复制</span><i>⌘ + C</i></el-menu-item>
+        <el-menu-item index="copy"><span>复制</span><i>⌘ + C</i></el-menu-item>
+        <el-sub-menu index="2-4">
+        <template #title>item four</template>
+        <el-menu-item index="2-4-1">item one</el-menu-item>
+        <el-menu-item index="2-4-2">item two</el-menu-item>
+        <el-menu-item index="2-4-3">item three</el-menu-item>
+      </el-sub-menu>
         <el-menu-item index="paste" :disabled="isPasteDisabled"><span>粘贴</span><i>⌘ + V</i></el-menu-item>
       </el-menu-item-group>
     </el-menu>
@@ -26,6 +32,7 @@
 </template>
 
 <script>
+
 import { reactive, toRefs ,toRef,computed, watch, watchEffect, onMounted} from 'vue'
 import { useStore } from 'vuex'
 import { GETTERS } from '@commits/editor'
@@ -57,21 +64,27 @@ export default {
             }
         })
 
-        function handleSelect(){
-
+        function handleSelect(item){
+          console.log(item);
+          onSelectMenu()
+        }
+        function handleClick(e){
+          e.stopPropagation()
         }
       return {
         ...toRefs(state),
         isContextMenuOpen,
         renderMenuStyle,
         pointerInfo,
-        handleSelect
+        handleSelect,
+        handleClick
       }
     }
 }
 
 </script>
 <style lang='less' scoped>
+
 .menu_wrap{
     position: fixed;
     top:0;
@@ -111,7 +124,7 @@ export default {
         text-align: right;
         font-size: 12px;
         font-style: normal;
-        color: var(--disabledColor);
+        // color: var(--disabledColor);
         &.menu_icon {
           color: #333;
         }

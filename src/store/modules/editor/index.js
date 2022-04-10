@@ -1,25 +1,33 @@
-import { cloneDeep } from "lodash"
-import { forEach } from "@/utils"
-import { defaultImgData } from "./config"
-import { createPointer } from "../../../utils/domUtils"
+import {
+  cloneDeep
+} from "lodash"
+import {
+  forEach
+} from "@/utils"
+import {
+  defaultImgData
+} from "./config"
+import {
+  createPointer,
+} from "../../../utils/domUtils"
 const state = () => {
   return {
-    pointerInfo:{
-      x:0,
-      y:0,
-      mX:0,
-      mY:0,
-      cx:0,
-      cy:0,
-      movePst:{
-        x:0,
-        y:0
+    pointerInfo: {
+      x: 0,
+      y: 0,
+      mX: 0,
+      mY: 0,
+      cx: 0,
+      cy: 0,
+      movePst: {
+        x: 0,
+        y: 0
       }
     },
     title: '',
     curCanvas: {
       title: '',
-      palette:{
+      palette: {
         width: 1500, // 画板宽
         height: 1500, // 画板高
         bgImage: '', // 画板背景图
@@ -28,39 +36,55 @@ const state = () => {
           style: 'background-image: linear-gradient(90deg, rgba(0, 245, 255, 1) 0%,rgba(31, 0, 255, 1) 100%);',
           color: {
             hex: '#ffffff',
-            rgba: { r: 0, g: 0, b: 0, a: 1 },
+            rgba: {
+              r: 0,
+              g: 0,
+              b: 0,
+              a: 1
+            },
             color: 'rgba(255, 255, 255, 1)'
           },
           deg: 90,
-          colors: [
-            {
-              color: 'rgba(255, 255, 255, 1)',
-              hex: '#ffffff',
-              pst: 100
-            },
-            {
-              color: 'rgba(0, 0, 0, 1)',
-              hex: '#000000',
-              pst: 0
-            }
+          colors: [{
+            color: 'rgba(255, 255, 255, 1)',
+            hex: '#ffffff',
+            pst: 100
+          },
+          {
+            color: 'rgba(0, 0, 0, 1)',
+            hex: '#000000',
+            pst: 0
+          }
           ]
         }, // 画板背景色
       },
-      element: defaultImgData?defaultImgData:[],
+      element: defaultImgData ? defaultImgData : [],
     },
     canvasScaleRatio: 1,
     materialPanelWidth: 60,
-    selectId:'',
-    selectIds:[],
-    isDagger: false
-    
+    selectId: '',
+    selectIds: [],
+    daggerEleList: [],
+    isDagger: false,
+    disabledDagger: false
+
   }
 }
 
-function getRatioElements (element, ratio) {
+function getRatioElements(element, ratio) {
   return cloneDeep(element).map(item => {
-    const { x, y, props, type } = item || {}
-    const { width, height, fontSize, radius } = props || {}
+    const {
+      x,
+      y,
+      props,
+      type
+    } = item || {}
+    const {
+      width,
+      height,
+      fontSize,
+      radius
+    } = props || {}
 
     item.x = x * ratio
     item.y = y * ratio
@@ -79,7 +103,7 @@ function getRatioElements (element, ratio) {
   })
 }
 const getters = {
-  currentElementInfoMap (state, getters) {
+  currentElementInfoMap(state, getters) {
     const infoMap = {}
     getters.viewCanvas.element &&
       getters.viewCanvas.element.forEach(item => {
@@ -87,10 +111,16 @@ const getters = {
       })
     return infoMap
   },
+  daggerEleListRadio(state) {
+    const ratio = state.canvasScaleRatio
+    return getRatioElements(state.daggerEleList, ratio)
+  },
   // 预览图数据
-  preViewCanvas (state) {
+  preViewCanvas(state) {
     const copyCurCanvas = cloneDeep(state.curCanvas)
-    const { element } = copyCurCanvas || {}
+    const {
+      element
+    } = copyCurCanvas || {}
 
     if (!Array.isArray(element)) {
       return state.curCanvas
@@ -104,9 +134,11 @@ const getters = {
     return copyCurCanvas
   },
   // 视图渲染数据
-  viewCanvas (state) {
+  viewCanvas(state) {
     const copyCurCanvas = cloneDeep(state.curCanvas)
-    const { element } = copyCurCanvas || {}
+    const {
+      element
+    } = copyCurCanvas || {}
 
     if (!Array.isArray(element)) {
       return state.curCanvas
@@ -120,40 +152,63 @@ const getters = {
     return copyCurCanvas
   },
   // 画布真实宽高
-  canvasRealSize (state) {
-    const { palette } = state.curCanvas
-    const { width, height } = palette || {}
+  canvasRealSize(state) {
+    const {
+      palette
+    } = state.curCanvas
+    const {
+      width,
+      height
+    } = palette || {}
     return {
       width,
       height
     }
   },
-  hoverEleList(state,getters){
+  hoverEleList(state, getters) {
     const copyCurCanvas = cloneDeep(getters.viewCanvas)
-    const {x,y} = cloneDeep(state.pointerInfo)
-    const { element } = copyCurCanvas || {}
-    let container = element.filter(item=>{
-        let l = item.x + item.props.width
-        let t = item.y + item.props.height
-        if(x>=item.x&&x<=l&&y>item.y&&y<=t){
-          return true
-        }
-        return false
+    const {
+      x,
+      y
+    } = cloneDeep(state.pointerInfo)
+    const {
+      element
+    } = copyCurCanvas || {}
+    let container = element.filter(item => {
+      let l = item.x + item.props.width
+      let t = item.y + item.props.height
+      if (x >= item.x && x <= l && y > item.y && y <= t) {
+        return true
+      }
+      return false
     })
     return container
   },
-  selectInfo(state,getters){
+  selectInfo(state, getters) {
     // console.log();
     const currentElementInfoMap = getters.currentElementInfoMap
     return currentElementInfoMap[state.selectId]
     const copyCurCanvas = cloneDeep(state.curCanvas)
-    const { element } = copyCurCanvas || {}
-    return element.find(item=>String(item.id)===String(state.selectId))
+    const {
+      element
+    } = copyCurCanvas || {}
+    return element.find(item => String(item.id) === String(state.selectId))
   },
-  getDaggerPointers(state,getters){
+  selectGroupInfo(state, getters) {
+    // console.log();
+    const ratio = state.canvasScaleRatio
+
+    const currentElementInfoMap = getters.currentElementInfoMap
+    return state.selectIds.map(id=>currentElementInfoMap[id])
+    // return getRatioElements(, ratio) 
+  },
+  getDaggerPointers(state, getters) {
     const copyCurCanvas = cloneDeep(getters.viewCanvas)
-    const { element } = copyCurCanvas || {}
-    return createPointer(element.find(item=>String(item.id)===String(state.selectId)))
+    const draggerList = getters.daggerEleListRadio
+    const {
+      element
+    } = copyCurCanvas || {}
+    return createPointer((draggerList.length>0?draggerList:element).find(item => String(item.id) === String(state.selectId)))
   },
 
 }
@@ -162,36 +217,63 @@ const mutations = {
   setDocTitle(state, title) {
     state.title = title
   },
-  setCanvasScaleRatio(state,scale){
+  setCanvasScaleRatio(state, scale) {
     state.canvasScaleRatio = scale
   },
-  setMaterialPanelWidth (state, width) {
+  setMaterialPanelWidth(state, width) {
     console.log(width);
     state.materialPanelWidth = width
   },
-  setPointerInfo(state,pointerInfo){
-    forEach(pointerInfo,(item,value)=>{
+  setPointerInfo(state, pointerInfo) {
+    forEach(pointerInfo, (item, value) => {
       state.pointerInfo[item] = value
     })
   },
-  setSelectId(state,selectId){
+  setSelectId(state, selectId) {
     state.selectId = selectId
+
+    // if(state.selectIds.length===0){
+    //   state.selectId = selectId
+    //   return 
+    // }
+    // if(state.selectId===selectId){
+    //   state.selectId = ''
+    // }
   },
-  setSelectGroupId(state,selectId){
-    if(selectId){
+  setSelectGroupId(state, selectId) {
+    if (selectId) {
+      const index = state.selectIds.indexOf(selectId)
+      if(index!==-1) {
+        state.selectIds.splice(index, 1)
+        return 
+      }
       state.selectIds.push(selectId)
-    }else{
+    } else {
       state.selectIds = []
     }
   },
-  setIsDagger(state,flag){
+  setIsDagger(state, flag) {
     state.isDagger = flag
   },
-  updateCurCanvasElement(state,eleData){
+  setDisabledDagger(state, flag) {
+    state.disabledDagger = flag
+  },
+  updateCurCanvasElement(state, eleData) {
+    if (state.disabledDagger) return
     let updateIndex
     const copyElement = cloneDeep(eleData)
-    const { x, y, props } = copyElement || {}
-    const { width, height, rotate, fontSize, radius } = props || {}
+    const {
+      x,
+      y,
+      props
+    } = copyElement || {}
+    const {
+      width,
+      height,
+      rotate,
+      fontSize,
+      radius
+    } = props || {}
 
     copyElement.x = x / state.canvasScaleRatio
     copyElement.y = y / state.canvasScaleRatio
@@ -207,8 +289,12 @@ const mutations = {
       copyElement.props.fontSize = fontSize / state.canvasScaleRatio
     }
 
-    const { id } = copyElement || {}
-    const { element } = state.curCanvas || {}
+    const {
+      id
+    } = copyElement || {}
+    const {
+      element
+    } = state.curCanvas || {}
 
     for (let index = 0; index < element.length; index++) {
       if (id === element[index].id) {
@@ -221,34 +307,100 @@ const mutations = {
     } else {
       state.curCanvas.element.push(copyElement)
     }
-  
-  },
-  draggerEle(state,eleData){
-    let updateIndex
-    const copyElement = cloneDeep(eleData)
-    const { element } = state.curCanvas || {}
-    const { id, x, y } = copyElement || {}
-    copyElement.x = x / state.canvasScaleRatio
-    copyElement.y = y / state.canvasScaleRatio
-    // return
-    updateIndex = element.findIndex(item=>String(item.id)===String(id))
-    if(updateIndex===-1){
 
-    }else{
-      const ele = cloneDeep(state.curCanvas.element[updateIndex])
-      ele.x = Number(copyElement.x)
-      ele.y = Number(copyElement.y)
+  },
+  updateDaggerList(state){
+    const daggerEleList = state.daggerEleList
+    const {
+      element
+    } = state.curCanvas || {}
+    daggerEleList.forEach(ele=>{
+      let updateIndex = element.findIndex(item => String(item.id) === String(ele.id))
       state.curCanvas.element[updateIndex] = ele
-    }
+
+    })
+   state.daggerEleList = []
+  },
+  draggerEle(state, eleData) {
+    if (state.disabledDagger) return
+    let updateIndex
+    let updateDaggerIndex
+    const copyElement = cloneDeep(eleData)
+    const daggerEleList = state.daggerEleList
+    const {
+      element
+    } = state.curCanvas || {}
+    const {
+      ids,
+      x,
+      y
+    } = copyElement || {}
+    // copyElement.x = x / state.canvasScaleRatio
+    // copyElement.y = y / state.canvasScaleRatio
+    // return
+
+    ids.forEach(id => {
+      updateIndex = element.findIndex(item => String(item.id) === String(id))
+      updateDaggerIndex = daggerEleList.findIndex(item => String(item.id) === String(id))
+      if (updateIndex === -1) {
+
+      } else {
+        let ele = daggerEleList.find(item => String(item.id) === String(id))
+        let newEle = cloneDeep(ele)
+        state.daggerEleList[updateDaggerIndex] = newEle
+      }
+    })
+
 
   }
 }
 
 const actions = {
-  setSelectId({state,commit},id){
-      commit('setSelectId',id)
-      commit('setSelectGroupId',id)
-  }
+  setSelectId({
+    state,
+    commit
+  }, id) {
+    commit('setSelectId', id)
+    commit('setSelectGroupId', id)
+  },
+  draggerEleList({
+    state,
+    commit,
+  }, updateEle) {
+    const {
+      element
+    } = state.curCanvas || {}
+    const daggerEleList = state.daggerEleList
+    const {
+      ids,
+      x,
+      y,
+      infoMap
+    } = updateEle || {}
+    if (daggerEleList.length !== 0) {
+      daggerEleList.forEach(function (ele) {
+        ele.x = Number(x) + Number(infoMap[ele.id].x)
+        ele.y = Number(y) + Number(infoMap[ele.id].y)
+        ele.x = ele.x / state.canvasScaleRatio
+        ele.y = ele.y / state.canvasScaleRatio
+      })
+      commit('draggerEle', updateEle)
+      return
+    }
+    ids.forEach(id => {
+      let ele = element.find(item => String(item.id) === String(id))
+      if (ele) {
+        const newEle = cloneDeep(ele)
+        newEle.x = Number(x) + Number(infoMap[id].x)
+        newEle.y = Number(y) + Number(infoMap[id].y)
+        newEle.x = newEle.x / state.canvasScaleRatio
+        newEle.y = newEle.y / state.canvasScaleRatio
+        state.daggerEleList.push(newEle)
+      }
+    })
+    commit('draggerEle', updateEle)
+
+  },
 }
 
 export default {

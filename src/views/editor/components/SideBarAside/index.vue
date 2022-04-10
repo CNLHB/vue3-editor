@@ -50,7 +50,8 @@ const shrinkHandler = () => {
   &.isShrinked {
     transform: translateX(-100%);
     .shrink {
-      top: 100%;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 }

@@ -11,12 +11,14 @@ const SET_SELECT_ID = 'editor/setSelectId'
 
 // 元素拖拽中
 const SET_IS_DAGGER = 'editor/setIsDagger'
-
+// 禁用拖拽
+const DISABLED_DAGGER = 'editor/setDisabledDagger'
 // 更新当前画布元素数据
 const UPDATE_CUR_CANVAS_ELEMENT = 'editor/updateCurCanvasElement'
 // 拖拽元素
 const DAGGER_ELE = 'editor/draggerEle'
-
+const DAGGER_ELE_LIST = 'editor/draggerEleList'
+const UPDATE_DAGGER_LIST = 'editor/updateDaggerList'
 // 更新选择框样式
 const UPDATE_SELECT_STYLE = 'editor/updateSelectStyle'
 
@@ -137,7 +139,9 @@ export const COMMITS = {
   SET_POINTER_INFO,
   SET_SELECT_ID,
   SET_IS_DAGGER,
-  DAGGER_ELE
+  DAGGER_ELE,
+  DISABLED_DAGGER,
+  UPDATE_DAGGER_LIST
 }
 
 /**
@@ -170,6 +174,8 @@ const GROUP_SELECT_ELE_DATA = 'editor/groupSelectEleData'
 const HOVER_ELE_LIST = 'editor/hoverEleList'
 const SELECT_INFO = 'editor/selectInfo'
 const GET_DAGGER_POINTERS = 'editor/getDaggerPointers'
+const DAGGER_ELE_LIST_RADIO = 'editor/daggerEleListRadio'
+const SELECT_GROUP_INFO = 'editor/selectGroupInfo'
 
 export const GETTERS = {
   VIEW_CANVAS,
@@ -182,7 +188,9 @@ export const GETTERS = {
   GROUP_SELECT_ELE_DATA,
   HOVER_ELE_LIST,
   SELECT_INFO,
-  GET_DAGGER_POINTERS
+  GET_DAGGER_POINTERS,
+  DAGGER_ELE_LIST_RADIO,
+  SELECT_GROUP_INFO
 }
 
 // 更新选择框、hover框样式
@@ -213,5 +221,7 @@ export const ACTIONS = {
   TO_SAVE_AS,
   TO_GET_PAGE_DATA,
   TO_PUSH_HISTORY_UNDO,
-  SET_GROUP_SELECT_IDS
+  SET_GROUP_SELECT_IDS,
+  DAGGER_ELE_LIST,
+
 }
